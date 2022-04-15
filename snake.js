@@ -9,9 +9,9 @@ const bestScore_element = document.getElementById('best_score');
 
 canvas.width = canvas.height = 400;
 
-const FR = 10;
-const S = 20;
-const T = canvas.width / S;
+const FRAME = 10;
+const SQUARE_WIDTH = 20;
+const FIELD_WIDTH = FIELD_HEIGHT = canvas.width / SQUARE_WIDTH;
 
 let count, pos, vel, food, snake;
 let best_score = 0;
@@ -66,8 +66,8 @@ function updateScore(value)
 function randomFood()
 {
     food = {
-        x: Math.floor(Math.random() * T),
-        y: Math.floor(Math.random() * T),
+        x: Math.floor(Math.random() * FIELD_WIDTH),
+        y: Math.floor(Math.random() * FIELD_WIDTH),
     }
 
     for(let cell of snake){
@@ -116,30 +116,39 @@ function keydown(e)
     }
 }
 
-setInterval(() => {
-    requestAnimationFrame(gameLoop);
-}, 1000 /FR);
-
-function gameLoop()
+function drawBackground()
 {
     ctx.fillStyle = BG_COLOUR;
     ctx.fillRect(0,0,canvas.width,canvas.height);
+}
 
+function drawSnake()
+{
     ctx.fillStyle = SNAKE_COLOUR;
     for(let cell of snake)
     {
-        ctx.fillRect(cell.x*S,cell.y*S,S,S);
+        ctx.fillRect(cell.x*SQUARE_WIDTH,cell.y*SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH);
     }
-    
-    ctx.fillStyle = FOOD_COLOUR;
-    ctx.fillRect(food.x*S, food.y*S,S,S);
+}
 
+function drawFood()
+{
+    ctx.fillStyle = FOOD_COLOUR;
+    ctx.fillRect(food.x*SQUARE_WIDTH, food.y*SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH);
+}
+
+setInterval(() => {
+    requestAnimationFrame(gameLoop);
+}, 1000 /FRAME);
+
+function gameLoop()
+{    
     //Shadow Move
     pos.x += vel.x;
     pos.y += vel.y;
 
     //dead by environnement
-    if(pos.x < 0 || pos.x >= T || pos.y < 0 || pos.y >= T)
+    if(pos.x < 0 || pos.x >= FIELD_WIDTH || pos.y < 0 || pos.y >= FIELD_HEIGHT)
     {
         kill();
     }
@@ -152,4 +161,8 @@ function gameLoop()
 
     //Move
     move();
+
+    drawBackground();
+    drawSnake();
+    drawFood();
 }
