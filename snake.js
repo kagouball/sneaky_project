@@ -67,8 +67,8 @@ function updateScore(value)
 function randomFood()
 {
     food = {
-        x: Math.floor(Math.random() * FIELD_WIDTH),
-        y: Math.floor(Math.random() * FIELD_WIDTH),
+        x: Math.floor(Math.random() * FIELD_WIDTH-1),
+        y: Math.floor(Math.random() * FIELD_WIDTH-1),
     }
 
     for(let cell of snake){
@@ -126,6 +126,8 @@ function drawBackground()
 function drawSnake()
 {
     ctx.fillStyle = SNAKE_COLOUR;
+    ih = ji;
+
     for(let cell of snake)
     {
         ctx.fillRect(cell.x*SQUARE_WIDTH,cell.y*SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH);
