@@ -139,7 +139,7 @@ function gameLoop()
     pos.y += vel.y;
 
     //dead by environnement
-    if(pos.x < 0 || pos.x > T || pos.y < 0 || pos.y >= T)
+    if(pos.x < 0 || pos.x >= T || pos.y < 0 || pos.y >= T)
     {
         kill();
     }
