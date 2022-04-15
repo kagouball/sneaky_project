@@ -1,5 +1,6 @@
 const BG_COLOUR = '#231f20';
 const SNAKE_COLOUR = '#c2c2c2';
+const SNAKE_HEAD_COLOUR = '#ff0000';
 const FOOD_COLOUR = '#e66916';
 
 const canvas = document.getElementById('canvas');
@@ -129,6 +130,10 @@ function drawSnake()
     {
         ctx.fillRect(cell.x*SQUARE_WIDTH,cell.y*SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH);
     }
+
+    let head = snake[snake.length-1];
+    ctx.fillStyle = SNAKE_HEAD_COLOUR;
+    ctx.fillRect(head.x*SQUARE_WIDTH,head.y*SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH);
 }
 
 function drawFood()
