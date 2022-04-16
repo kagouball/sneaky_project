@@ -10,12 +10,14 @@ const bestScore_element = document.getElementById('best_score');
 
 canvas.width = canvas.height = 400;
 
+const MAX_SPEED = 50;
 const FRAME = 10;
 const SQUARE_WIDTH = 20;
 const FIELD_WIDTH = FIELD_HEIGHT = canvas.width / SQUARE_WIDTH;
 
 let count, pos, vel, food, snake;
 let best_score = 0;
+let speed = 10;
 
 //beginning of the game
 function init(){
@@ -37,6 +39,7 @@ init();
 function eatFood()
 {
     updateScore(count+1);
+    updateSpeed(speed+1);
     snake.push({...pos});
     pos.x += vel.x;
     pos.y += vel.y;
@@ -62,6 +65,11 @@ function updateScore(value)
     count = value;
     score_element.innerHTML = "Actual Score : " + count;
     updateBestScore(value);
+}
+
+function updateSpeed(value)
+{
+    speed = Math.min(value,MAX_SPEED);
 }
 
 function randomFood()
@@ -144,7 +152,7 @@ function drawFood()
 
 setInterval(() => {
     requestAnimationFrame(gameLoop);
-}, 1000 /FRAME);
+}, (1000/FRAME));
 
 function gameLoop()
 {    
