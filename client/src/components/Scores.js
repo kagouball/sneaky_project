@@ -1,0 +1,22 @@
+import PropTypes from 'prop-types'
+
+const Scores = ({ actualScore, bestScore }) => {
+  return (
+      <>
+        <h1>Best Score : {bestScore}</h1>
+        <h2>actual score : {actualScore}</h2>
+      </>
+  )
+}
+
+Scores.defaultProps = {
+    actualScore : 0,
+    bestScore: 0,
+}
+
+Scores.propTypes = {
+    actualScore: PropTypes.number,
+    bestScore: PropTypes.number,
+}
+
+export default Scores
