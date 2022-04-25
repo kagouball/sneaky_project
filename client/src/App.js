@@ -24,8 +24,9 @@ function App() {
     <div className="container">
       <Header />
       <Scores />
-      <GameArea draw={drawGameArea}/>
-      <Field draw={draw}/>
+      <div></div>
+      <GameArea />
+      {/* <Field draw={draw}/> */}
     </div>
   );
 }
