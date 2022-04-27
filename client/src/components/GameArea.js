@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Snake from "./Snake"
 import Food from './Food'
-import { init } from 'express/lib/application';
 
 const getRandomCoordinates = () => {
   let min = 1;
@@ -13,12 +12,10 @@ const getRandomCoordinates = () => {
 
 const initialState = {
   food: getRandomCoordinates(),
-  speed : 200,
-  direction : 'RIGHT',
+  speed : 100,
+  direction : 'NONE',
   snakeDots: [
-    [0,0],
-    [2,0],
-    [4,0],
+    getRandomCoordinates()
   ]
 }
 
@@ -33,6 +30,8 @@ class GameArea extends Component{
 
   componentDidUpdate(){
     this.checkIfOutOfBorders();
+    this.checkIfCollapsed();
+    this.checkIfEat();
   }
 
   onKeyDown = (e) => {
@@ -49,6 +48,9 @@ class GameArea extends Component{
         break;
       case 39:
         this.setState({direction: 'RIGHT'});
+        break;
+      case 32:
+        this.setState({direction: 'NONE'});
         break;
     }
   }
@@ -83,6 +85,45 @@ class GameArea extends Component{
     let head = this.state.snakeDots[this.state.snakeDots.length -1];
     if(head[0] >= 100 || head[1] >= 100 || head[0] < 0 || head[1] < 0){
       this.onGameOver();
+    }
+  }
+
+  checkIfCollapsed(){
+    let snake = [...this.state.snakeDots];
+    let head = snake[snake.length - 1];
+    snake.pop();
+    snake.forEach(dot => {
+      if (head[0] === dot[0] && head[1] === dot[1]){
+        this.onGameOver();
+      }
+    })
+  }
+
+  checkIfEat(){
+    let food = this.state.food;
+    let head = this.state.snakeDots[this.state.snakeDots.length -1];
+    if(food[0] === head[0] && food[1] === head[1]){
+      this.setState({
+        food : getRandomCoordinates()
+      })
+      this.enlargeSnake();
+      this.increaseSpeed();
+    }
+  }
+
+  enlargeSnake(){
+    let newSnake = [...this.state.snakeDots];
+    newSnake.unshift([]);
+    this.setState({
+      snakeDots: newSnake
+    })
+  }
+
+  increaseSpeed() {
+    if(this.state.speed > 10){
+      this.setState({
+        speed : this.state.speed - 10
+      })
     }
   }
 
