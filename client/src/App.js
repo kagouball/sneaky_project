@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Header from './components/Header'
 import Scores from './components/Scores'
 import GameArea from './components/GameArea'
@@ -20,12 +21,13 @@ function App() {
       ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
   }
 
+  const [score, setScore] = useState(0);
+
   return (
     <div className="container">
       <Header />
-      <Scores />
-      <div></div>
-      <GameArea />
+      <Scores actualScore={score}/>
+      <GameArea changeScore={setScore}/>
       {/* <Field draw={draw}/> */}
     </div>
   );

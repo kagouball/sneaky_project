@@ -2,17 +2,19 @@ import React, { Component } from 'react'
 import Snake from "./Snake"
 import Food from './Food'
 
+const stepLength = 10;
+
 const getRandomCoordinates = () => {
-  let min = 1;
-  let max = 98;
-  let x = Math.floor((Math.random()*(max-min+1)+min)/2)*2;
-  let y = Math.floor((Math.random()*(max-min+1)+min)/2)*2;
+  let min = stepLength;
+  let max = 100 - stepLength;
+  let x = Math.floor((Math.random()*(max-min+1)+min)/stepLength)*stepLength;
+  let y = Math.floor((Math.random()*(max-min+1)+min)/stepLength)*stepLength;
   return [x, y];
 }
 
 const initialState = {
   food: getRandomCoordinates(),
-  speed : 100,
+  speed : 200,
   direction : 'NONE',
   snakeDots: [
     getRandomCoordinates()
@@ -36,22 +38,32 @@ class GameArea extends Component{
 
   onKeyDown = (e) => {
     e = e || window.event;
+    let newDirection = 'NONE';
     switch (e.keyCode) {
       case 38:
-        this.setState({direction: 'UP'});
+        newDirection = 'UP';
         break;
       case 40:
-        this.setState({direction: 'DOWN'});
+        newDirection = 'DOWN';
         break;
       case 37:
-        this.setState({direction: 'LEFT'});
+        newDirection = 'LEFT';
         break;
       case 39:
-        this.setState({direction: 'RIGHT'});
+        newDirection = 'RIGHT';
         break;
       case 32:
-        this.setState({direction: 'NONE'});
+        newDirection = 'NONE';
         break;
+    }
+    if((newDirection === 'UP' && this.state.direction === 'DOWN') ||
+    (newDirection === 'DOWN' && this.state.direction === 'UP') || 
+    (newDirection === 'RIGHT' && this.state.direction === 'LEFT') ||
+    (newDirection === 'LEFT' && this.state.direction === 'RIGHT'))
+    {
+      return
+    }else{
+      this.setState({direction : newDirection})
     }
   }
 
@@ -61,16 +73,16 @@ class GameArea extends Component{
 
     switch(this.state.direction){
       case 'RIGHT':
-        head = [head[0] + 2, head[1]];
+        head = [head[0] + stepLength, head[1]];
         break;
       case 'LEFT':
-        head = [head[0] - 2, head[1]];
+        head = [head[0] - stepLength, head[1]];
         break;
       case 'DOWN':
-        head = [head[0], head[1] + 2];
+        head = [head[0], head[1] + stepLength];
         break;
       case 'UP':
-        head = [head[0], head[1] - 2];
+        head = [head[0], head[1] - stepLength];
         break;
     }
 
@@ -107,6 +119,7 @@ class GameArea extends Component{
         food : getRandomCoordinates()
       })
       this.enlargeSnake();
+      this.props.changeScore( this.state.snakeDots.length );
       this.increaseSpeed();
     }
   }
@@ -130,6 +143,7 @@ class GameArea extends Component{
   onGameOver(){
     alert(`Game Over. Score : ${this.state.snakeDots.length}`)
     this.setState(initialState)
+    this.props.changeScore(0)
   }
 
   render(){
