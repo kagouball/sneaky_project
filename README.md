@@ -1,5 +1,5 @@
 # sneaky_project
-2D Sneak multiplayer game on the web
+2D Snake multiplayer game using React and socket.io
 
 ## Sources
 
