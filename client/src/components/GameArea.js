@@ -93,6 +93,30 @@ class GameArea extends Component{
     })
   }
 
+  isInSnake(coords){
+    let snake = [...this.state.snakeDots]
+    let coordsInSnake = false;
+    snake.forEach(dot => {
+      if (coords[0] === dot[0] && coords[1] === dot[1]){
+        coordsInSnake = true;
+        return
+      }
+    })
+    return coordsInSnake;
+  }
+  
+  getNewFoodCoordinates(){
+    let notGood = true;
+    let newFood;
+    while(notGood){
+      newFood = getRandomCoordinates();
+      console.log(`new Food : ${newFood}`)
+      notGood = this.isInSnake(newFood)
+      console.log(`not good : ${notGood}`)
+    }
+    return newFood
+  }
+
   checkIfOutOfBorders() {
     let head = this.state.snakeDots[this.state.snakeDots.length -1];
     if(head[0] >= 100 || head[1] >= 100 || head[0] < 0 || head[1] < 0){
@@ -114,9 +138,10 @@ class GameArea extends Component{
   checkIfEat(){
     let food = this.state.food;
     let head = this.state.snakeDots[this.state.snakeDots.length -1];
+
     if(food[0] === head[0] && food[1] === head[1]){
       this.setState({
-        food : getRandomCoordinates()
+        food : this.getNewFoodCoordinates()
       })
       this.enlargeSnake();
       this.props.changeScore( this.state.snakeDots.length );
