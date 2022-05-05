@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Snake from "./Snake"
 import Food from './Food'
 
-const stepLength = 10;
+const stepLength = 5;
 
 const getRandomCoordinates = () => {
   let min = stepLength;
@@ -14,7 +14,7 @@ const getRandomCoordinates = () => {
 
 const initialState = {
   food: getRandomCoordinates(),
-  speed : 200,
+  speed : 140,
   direction : 'NONE',
   snakeDots: [
     getRandomCoordinates()

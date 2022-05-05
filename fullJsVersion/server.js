@@ -26,6 +26,6 @@ io.on('connection', (socket) =>{
 });
 
 //on change app par server
-server.listen(3000, function(){
-    console.log("Server ready on port 3000");
+server.listen(3030, function(){
+    console.log("Server ready on port 3030");
 });
