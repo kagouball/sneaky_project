@@ -22,12 +22,22 @@ function App() {
   }
 
   const [score, setScore] = useState(0);
+  const [bestScore, setBestScore] = useState(0);
+
+  const updateScore = (score) =>
+  {
+      if(score > bestScore)
+      {
+        setBestScore(score)
+      }
+      setScore(score);
+  }
 
   return (
     <div className="container">
       <Header />
-      <Scores actualScore={score}/>
-      <GameArea changeScore={setScore}/>
+      <Scores actualScore={score} bestScore={bestScore}/>
+      <GameArea changeScore={updateScore}/>
       {/* <Field draw={draw}/> */}
     </div>
   );
