@@ -5,8 +5,8 @@ import Food from './Food'
 const stepLength = 5;
 
 const getRandomCoordinates = () => {
-  let min = stepLength;
-  let max = 100 - stepLength;
+  let min = 2*stepLength;
+  let max = 100 - (2*stepLength);
   let x = Math.floor((Math.random()*(max-min+1)+min)/stepLength)*stepLength;
   let y = Math.floor((Math.random()*(max-min+1)+min)/stepLength)*stepLength;
   return [x, y];
@@ -14,7 +14,7 @@ const getRandomCoordinates = () => {
 
 const initialState = {
   food: getRandomCoordinates(),
-  speed : 140,
+  speed : 100,
   direction : 'NONE',
   snakeDots: [
     getRandomCoordinates()
@@ -26,7 +26,7 @@ class GameArea extends Component{
   state = initialState;
 
   componentDidMount() {
-    setInterval(this.moveSnake,this.state.speed);
+    this.updateInterval()
     document.onkeydown = this.onKeyDown;
   }
 
@@ -34,6 +34,10 @@ class GameArea extends Component{
     this.checkIfOutOfBorders();
     this.checkIfCollapsed();
     this.checkIfEat();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   onKeyDown = (e) => {
@@ -110,9 +114,7 @@ class GameArea extends Component{
     let newFood;
     while(notGood){
       newFood = getRandomCoordinates();
-      console.log(`new Food : ${newFood}`)
       notGood = this.isInSnake(newFood)
-      console.log(`not good : ${notGood}`)
     }
     return newFood
   }
@@ -162,13 +164,24 @@ class GameArea extends Component{
       this.setState({
         speed : this.state.speed - 10
       })
+      clearInterval(this.interval)
+      this.interval = setInterval(this.moveSnake,this.state.speed);
     }
   }
 
   onGameOver(){
     alert(`Game Over. Score : ${this.state.snakeDots.length}`)
-    this.setState(initialState)
+    this.setState(initialState, () => {
+      //callback because of setState being async
+      this.updateInterval()
+    })
     this.props.changeScore(0)
+  }
+
+  updateInterval()
+  {
+    clearInterval(this.interval);
+    this.interval = setInterval(this.moveSnake,this.state.speed);
   }
 
   render(){
