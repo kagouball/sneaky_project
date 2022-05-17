@@ -21,3 +21,8 @@
   background-color: red;
   z-index: 1;
 }
+
+.slide-bar{
+  position: relative;
+  width: 30%;
+}

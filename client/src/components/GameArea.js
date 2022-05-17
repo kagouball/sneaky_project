@@ -28,6 +28,7 @@ class GameArea extends Component{
   componentDidMount() {
     this.updateInterval()
     document.onkeydown = this.onKeyDown;
+    this.props.changePlayingState(false);
   }
 
   componentDidUpdate(){
@@ -41,6 +42,7 @@ class GameArea extends Component{
   }
 
   onKeyDown = (e) => {
+    this.props.changePlayingState(true);
     e = e || window.event;
     let newDirection = 'NONE';
     switch (e.keyCode) {
@@ -58,6 +60,7 @@ class GameArea extends Component{
         break;
       case 32:
         newDirection = 'NONE';
+        this.props.changePlayingState(false);
         break;
     }
     if((newDirection === 'UP' && this.state.direction === 'DOWN') ||
@@ -171,6 +174,7 @@ class GameArea extends Component{
 
   onGameOver(){
     alert(`Game Over. Score : ${this.state.snakeDots.length}`)
+    this.props.changePlayingState(false);
     this.setState(initialState, () => {
       //callback because of setState being async
       this.updateInterval()
@@ -186,7 +190,7 @@ class GameArea extends Component{
 
   render(){
     return (
-      <div className="game-area">
+      <div className="game-area" style={{width: this.props.arenaLength+"px", height: this.props.arenaLength+"px"}}>
         <Snake Dots={this.state.snakeDots}></Snake>
         <Food Dot={this.state.food}></Food>
       </div>

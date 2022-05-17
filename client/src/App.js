@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Header from './components/Header'
 import Scores from './components/Scores'
 import GameArea from './components/GameArea'
+import SlideBar from './components/SlideBar'
 import Field from './components/FieldTest/Field'
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
 
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [arenaLength, setArenaLength] = useState(50);
 
   const updateScore = (score) =>
   {
@@ -33,11 +36,20 @@ function App() {
       setScore(score);
   }
 
+  const updateArenaLength = (length) =>
+  {
+    if(!isPlaying)
+    {
+      setArenaLength(length*4);
+    }
+  }
+
   return (
     <div className="container">
       <Header />
       <Scores actualScore={score} bestScore={bestScore}/>
-      <GameArea changeScore={updateScore}/>
+      <SlideBar gameOn={isPlaying} changeArenaLength={updateArenaLength} arenaLength={arenaLength}/>
+      <GameArea changeScore={updateScore} changePlayingState={setIsPlaying} arenaLength={arenaLength}/>
       {/* <Field draw={draw}/> */}
     </div>
   );
