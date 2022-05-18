@@ -11,7 +11,7 @@ class SlideBar extends Component{
         return(
             <div className='slide-bar'>
               <h1>Arena Length : {this.props.arenaLength}</h1>
-              <Slider defaultValue={10} step={10} marks min={10} max={100} onChange={(e, val) => this.onSliderChangeValue(val)} disabled={this.props.gameOn}/>
+              <Slider defaultValue={this.props.arenaLength} step={10} marks min={10} max={600} onChange={(e, val) => this.onSliderChangeValue(val)} disabled={this.props.gameOn}/>
             </div>
         )
     }
