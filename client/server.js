@@ -28,6 +28,11 @@ io.on("connection", (socket) => {
     io.emit("new_user", user_count);
     console.log(`${socket.id} has disconnected`);
   });
+
+  socket.on("test", (value) => {
+    console.log(`${value} test`);
+    io.emit("test",value)
+  });
 });
 
 //on change app par server

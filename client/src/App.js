@@ -7,23 +7,28 @@ import Field from "./components/FieldTest/Field";
 import socketIOClient from "socket.io-client";
 import { useEffect } from "react";
 
+const ENDPOINT = "http://127.0.0.1:3030";
+const socket = socketIOClient.connect(ENDPOINT)
+
 function App() {
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [arenaLength, setArenaLength] = useState(200);
   const [userCount, setUserCount] = useState(0);
-
-  const ENDPOINT = "http://127.0.0.1:3030";
+  const [testValue, setTest] = useState(false)
 
   useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
-    socket.connect();
     socket.on("new_user", (data) => {
       console.log("data from socket : ", data);
       setUserCount(data);
     });
-  }, []);
+
+    socket.on("test", (data) => {
+      console.log("receiving test : ", data);
+      setTest(data)
+    })
+  }, [])
 
   const updateScore = (score) => {
     if (score > bestScore) {
@@ -38,8 +43,17 @@ function App() {
     }
   };
 
+  const emitTest = (value) => {
+    setTest(value)
+    console.log(`target value : ${value}`);
+    socket.emit("test",value)
+  }
+
   return (
     <div className="container">
+      <input type="checkbox" onChange={(e)=>{}} checked={testValue} onClick={(e)=>{
+        emitTest(e.target.checked)
+        }}/>
       <Header userCount={userCount} />
       <Scores actualScore={score} bestScore={bestScore} />
       <SlideBar
