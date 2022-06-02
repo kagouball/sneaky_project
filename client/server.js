@@ -22,10 +22,10 @@ app.get("/", function (req, res) {
 io.on("connection", (socket) => {
   console.log(`New user connect : ${socket.id}`);
   user_count += 1;
-  io.emit("new_user", user_count);
+  io.emit("new_user", ({'count' : user_count, 'socket_id' : socket.id}));
   socket.on("disconnect", (reason) => {
     user_count -= 1;
-    io.emit("new_user", user_count);
+    io.emit("new_user", {'count' : user_count, 'socket_id' : socket.id});
     console.log(`${socket.id} has disconnected`);
   });
 
