@@ -65,6 +65,7 @@ function App() {
         changeScore={updateScore}
         changePlayingState={setIsPlaying}
         arenaLength={arenaLength}
+        socket={socket}
       />
       {/* <Field draw={draw}/> */}
     </div>

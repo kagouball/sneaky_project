@@ -18,17 +18,31 @@ const initialState = {
   direction : 'NONE',
   snakeDots: [
     getRandomCoordinates()
-  ]
+  ],
+  playersDots: new Map()
 }
 
 class GameArea extends Component{
 
   state = initialState;
 
+  emitPosition(){
+    this.props.socket.emit("update_position", this.state.snakeDots);
+  }
+
   componentDidMount() {
     this.updateInterval()
     document.onkeydown = this.onKeyDown;
     this.props.changePlayingState(false);
+    this.emitPosition();
+    this.props.socket.on("update_position", (data) => {
+      if(data.socket_id !== this.props.socket.id)
+      {
+        let tmp = new Map(this.state.playersDots)
+        tmp.set(data.socket_id, data.dots)
+        this.setState({playersDots : tmp})
+      }
+    });
   }
 
   componentDidUpdate(){
@@ -74,6 +88,11 @@ class GameArea extends Component{
     }
   }
 
+  getAllDots = () => {
+    let allDots = this.state.snakeDots.concat([...this.state.playersDots.values()].flat());
+    return allDots;
+  }
+
   moveSnake = () => {
     let dots = [...this.state.snakeDots];
     let head = dots[dots.length-1];
@@ -98,10 +117,13 @@ class GameArea extends Component{
     this.setState({
       snakeDots: dots
     })
+
+    this.emitPosition();
   }
 
   isInSnake(coords){
-    let snake = [...this.state.snakeDots]
+    let snake = [...this.getAllDots()]
+    console.log(snake)
     let coordsInSnake = false;
     snake.forEach(dot => {
       if (coords[0] === dot[0] && coords[1] === dot[1]){
@@ -130,7 +152,7 @@ class GameArea extends Component{
   }
 
   checkIfCollapsed(){
-    let snake = [...this.state.snakeDots];
+    let snake = [...this.getAllDots()];
     let head = snake[snake.length - 1];
     snake.pop();
     snake.forEach(dot => {
@@ -191,7 +213,7 @@ class GameArea extends Component{
   render(){
     return (
       <div className="game-area" style={{width: this.props.arenaLength+"px", height: this.props.arenaLength+"px"}}>
-        <Snake Dots={this.state.snakeDots}></Snake>
+        <Snake Dots={this.getAllDots()}></Snake>
         <Food Dot={this.state.food}></Food>
       </div>
     )

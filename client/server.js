@@ -10,6 +10,7 @@ const io = require("socket.io")(server, {
 });
 
 let user_count = 0;
+let playersDots = new Map();
 
 app.use(cors());
 app.use(express.static("build"));
@@ -23,6 +24,7 @@ io.on("connection", (socket) => {
   console.log(`New user connect : ${socket.id}`);
   user_count += 1;
   io.emit("new_user", ({'count' : user_count, 'socket_id' : socket.id}));
+  
   socket.on("disconnect", (reason) => {
     user_count -= 1;
     io.emit("new_user", {'count' : user_count, 'socket_id' : socket.id});
@@ -32,6 +34,11 @@ io.on("connection", (socket) => {
   socket.on("test", (value) => {
     console.log(`${value} test`);
     io.emit("test",value)
+  });
+
+  socket.on("update_position", (dots) => {
+    //console.log(`update position ${dots}`);
+    io.emit("update_position", {'dots' : dots, 'socket_id' : socket.id})
   });
 });
 
