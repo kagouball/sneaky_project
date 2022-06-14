@@ -26,3 +26,12 @@
   position: relative;
   width: 30%;
 }
+
+.party-view{
+  visibility: collapse;
+  display: none;
+}
+
+.start-view{
+  visibility: visible;
+}
