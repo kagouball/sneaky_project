@@ -1,5 +1,7 @@
-const { createGameState } = require('./gameLogic/gameMain');
+const { createGameState, gameLoop } = require('./gameLogic/gameMain');
+const { getUpdatedVelocity } = require("./gameLogic/helper")
 const { makeid } = require('./utils');
+const { FRAME_RATE } = require('./constant')
 
 const express = require("express");
 const cors = require("cors");
@@ -35,6 +37,7 @@ io.on("connection", (socket) => {
   socket.on("join_room", onJoinRoom)
 
   function onkeydown(keyCode) {
+    console.log("receive keycode : ", keyCode)
     const roomName = clientRooms[socket.id];
     if (!roomName) {
       return;
@@ -46,7 +49,11 @@ io.on("connection", (socket) => {
       return;
     }
     let player = state[roomName].players[socket.number -1]
-    //updatePlayerDirection(player, keyCode);
+    const velocity = getUpdatedVelocity(keyCode);
+    if(velocity)
+    {
+      state[roomName].players[socket.number -1].direction = velocity;
+    }
   }
 
   function onCreateRoom() {
@@ -62,8 +69,10 @@ io.on("connection", (socket) => {
     socket.join(roomName);
     socket.number = 1;
     socket.emit("new_user", ({ 'count': socket.number, 'socket_id': socket.id }));
-    console.log(`Init with ${state[roomName]}`)
+    //console.log(`Init with ${state[roomName]}`)
     socket.emit("init", state[roomName])
+
+    startGameInterval(roomName);
   }
 
   function onJoinRoom(roomName) {
@@ -100,3 +109,27 @@ server.listen(3030, function () {
   console.log("Server ready on port 3030");
 });
 
+function startGameInterval(roomName) {
+  const intervalId = setInterval(() => {
+    const winner = gameLoop(state[roomName]);
+    
+    if (!winner) {
+      emitGameState(roomName, state[roomName])
+    } else {
+      emitGameOver(roomName, winner);
+      state[roomName] = null;
+      clearInterval(intervalId);
+    }
+  }, 1000 / FRAME_RATE);
+}
+
+function emitGameState(room, gameState) {
+  // Send this event to everyone in the room.
+  io.sockets.in(room)
+    .emit('gameState', gameState);
+}
+
+function emitGameOver(room, winner) {
+  io.sockets.in(room)
+    .emit('gameOver',{ winner });
+}

@@ -3,7 +3,8 @@ const { randomFoodCoordinates } = require("./foodManagment")
 const { FIELD_SIZE } = require("../constant")
 
 module.exports = {
-    createGameState
+    createGameState,
+    gameLoop
 }
 
 function createGameState() {
@@ -35,8 +36,12 @@ function gameLoop(state)
     }
 
     state.players.forEach(player => {
+        if(player.direction[0] == 0 && player.direction[1] == 0)
+        {
+            return;
+        }
         moveSnake(player);
-        checkIfPlayerEat(state);
+        checkIfPlayerEat(state, player);
     });
 
     state.players.forEach(player => {
@@ -51,9 +56,7 @@ function moveSnake(snake)
 {
     let dots = [...snake.dots];
     let head = dots[dots.length-1];
-
     head = [head[0] + snake.direction[0], head[1] + snake.direction[1]]
-
     dots.push(head);
     dots.shift();
     
@@ -62,7 +65,7 @@ function moveSnake(snake)
 
 function isPlayerOutOfBorders(player, fieldSize) 
 {
-    let head = player.dots[this.state.snakeDots.length -1];
+    let head = player.dots[player.dots.length -1];
     if(head[0] >= fieldSize || head[1] >= fieldSize || head[0] < 0 || head[1] < 0){
       return true;
     }
@@ -86,7 +89,7 @@ function checkIfPlayerEat(state, player)
 {
     if(isPlayerOnFood(state.food, player))
     {
-        state.food = randomFoodCoordinates();
+        state.food = randomFoodCoordinates(FIELD_SIZE, state.players.map(player=>player.dots));
         enlargeSnake(player);
         //changeScore( this.state.snakeDots.length );
         //increaseSpeed();
@@ -102,7 +105,7 @@ function enlargeSnake(player)
 
 function isPlayerOnFood(food, player)
 {
-    let head = player.dots[state.dots.length -1];
+    let head = player.dots[player.dots.length -1];
 
     if(food[0] === head[0] && food[1] === head[1]){
       return true;

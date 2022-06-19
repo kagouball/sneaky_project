@@ -22,14 +22,16 @@ class GameArea extends Component {
   componentDidMount() {
     document.onkeydown = this.onKeyDown;
     this.props.changePlayingState(false);
-    this.props.socket.on("update_dots", (data) => {
-      this.setState({ dots: data })
+    this.props.socket.on("gameState", (data) => {
+      this.setState({dots: data.players.map(player=>player.dots)})
+      this.setState({fieldSize: data.fieldSize})
+      this.setState({food: data.food});
     });
     
     this.props.socket.on("init", (data) => {
       if(data)
       {
-        console.log(data);
+        //console.log(data);
         this.setState({dots: data.players.map(player=>player.dots)})
         this.setState({fieldSize: data.fieldSize})
         this.setState({food: data.food});

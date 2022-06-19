@@ -28,16 +28,16 @@ function isInASnake(snakesDots, coords){
 function getUpdatedVelocity(keyCode) {
   switch (keyCode) {
     case 37: { // left
-      return { x: -1, y: 0 };
+      return [-1, 0];
     }
     case 40: { // down
-      return { x: 0, y: -1 };
+      return [0, 1];
     }
     case 39: { // right
-      return { x: 1, y: 0 };
+      return [1, 0];
     }
     case 38: { // up
-      return { x: 0, y: 1 };
+      return [0, -1];
     }
   }
 }
