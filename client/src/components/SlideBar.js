@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Slider from '@material-ui/core/Slider';
+import Slider from '@mui/material/Slider';
 
 class SlideBar extends Component{
     
@@ -11,7 +11,13 @@ class SlideBar extends Component{
         return(
             <div className='slide-bar'>
               <h1>Arena Length : {this.props.arenaLength}</h1>
-              <Slider defaultValue={this.props.arenaLength} step={10} marks min={10} max={600} onChange={(e, val) => this.onSliderChangeValue(val)} disabled={this.props.gameOn}/>
+              <Slider 
+              value={this.props.arenaLength} 
+              step={1}
+              marks 
+              min={1} 
+              max={50} 
+              onChange={(e, val) => this.onSliderChangeValue(val)} disabled={this.props.gameOn}/>
             </div>
         )
     }

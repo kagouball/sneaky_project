@@ -1,15 +1,16 @@
 module.exports = {
   getRandomCoordinates,
-  isInASnake
+  isInASnake,
+  getUpdatedVelocity
 }
 
-function getRandomCoordinates(dotSize, fieldSize)
+function getRandomCoordinates(fieldSize)
 {
     //we don't want coordinates in the border or in contacte with it
-    let min = 2*dotSize;
-    let max = fieldSize - (2*dotSize);
-    let x = Math.floor((Math.random()*(max-min+1)+min)/dotSize)*dotSize;
-    let y = Math.floor((Math.random()*(max-min+1)+min)/dotSize)*dotSize;
+    let min = 1;
+    let max = fieldSize - 1;
+    let x = Math.floor((Math.random()*(max-min)+min));
+    let y = Math.floor((Math.random()*(max-min)+min));
     return [x, y];
 }
 
@@ -22,4 +23,21 @@ function isInASnake(snakesDots, coords){
       }
     })
     return coordsInSnake;
+}
+
+function getUpdatedVelocity(keyCode) {
+  switch (keyCode) {
+    case 37: { // left
+      return { x: -1, y: 0 };
+    }
+    case 40: { // down
+      return { x: 0, y: -1 };
+    }
+    case 39: { // right
+      return { x: 1, y: 0 };
+    }
+    case 38: { // up
+      return { x: 0, y: 1 };
+    }
+  }
 }

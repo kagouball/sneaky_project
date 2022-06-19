@@ -1,4 +1,4 @@
-const { initGame } = require('./gameLogic/gameMain');
+const { createGameState } = require('./gameLogic/gameMain');
 const { makeid } = require('./utils');
 
 const express = require("express");
@@ -16,7 +16,7 @@ let clientRooms = {};
 let state = {};
 
 app.use(cors());
-app.use(express.static("build"));
+app.use(express.static("../client/build"));
 // Cors allow all origins
 app.get("/", function (req, res) {
   res.sendFile("index.html", { root: __dirname });
@@ -30,11 +30,11 @@ io.on("connection", (socket) => {
     console.log(`${socket.id} has disconnected`);
   });
 
-  socket.on("update_direction", onUpdateDirection);
+  socket.on("keydown", onkeydown);
   socket.on("create_room", onCreateRoom)
   socket.on("join_room", onJoinRoom)
 
-  function onUpdateDirection(keyCode) {
+  function onkeydown(keyCode) {
     const roomName = clientRooms[socket.id];
     if (!roomName) {
       return;
@@ -45,9 +45,8 @@ io.on("connection", (socket) => {
       console.error(e);
       return;
     }
-
     let player = state[roomName].players[socket.number -1]
-    updatePlayerDirection(player, keyCode);
+    //updatePlayerDirection(player, keyCode);
   }
 
   function onCreateRoom() {
@@ -56,11 +55,15 @@ io.on("connection", (socket) => {
     console.log(roomName);
     socket.emit('gameCode', roomName);
 
-    //state[roomName] = initGame();
+    let initialState = createGameState();
+    //console.log(initialState.players[0].dots)
+    state[roomName] = initialState;
 
     socket.join(roomName);
     socket.number = 1;
     socket.emit("new_user", ({ 'count': socket.number, 'socket_id': socket.id }));
+    console.log(`Init with ${state[roomName]}`)
+    socket.emit("init", state[roomName])
   }
 
   function onJoinRoom(roomName) {
@@ -85,8 +88,10 @@ io.on("connection", (socket) => {
 
     socket.join(roomName);
     socket.number = socket.number + 1;
+
     io.sockets.in(roomName).emit("new_user", ({ 'count': socket.number, 'socket_id': socket.id }));
     socket.emit('gameCode', roomName);
+    socket.emit('init', state[roomName]);
   }
 });
 

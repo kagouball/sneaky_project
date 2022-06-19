@@ -15,9 +15,8 @@ function App() {
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [arenaLength, setArenaLength] = useState(200);
+  const [arenaLength, setArenaLength] = useState(20);
   const [userCount, setUserCount] = useState(0);
-  const [testValue, setTest] = useState(false)
   const [isInParty, setIsInParty] = useState(false);
   const [roomName, setRoomName] = useState("");
 
@@ -26,11 +25,6 @@ function App() {
       console.log("id  : ", data.socket_id);
       setUserCount(data.count);
     });
-
-    socket.on("test", (data) => {
-      console.log("receiving test : ", data);
-      setTest(data)
-    })
 
     socket.on("gameCode", (roomName) => {
       setIsInParty(true);
@@ -67,12 +61,6 @@ function App() {
     }
   };
 
-  const emitTest = (value) => {
-    setTest(value)
-    console.log(`target value : ${value}`);
-    socket.emit("test",value)
-  }
-
   const emitCreateRoom = () => {
     console.log("try to create room")
     socket.emit("create_room");
@@ -89,9 +77,6 @@ function App() {
         <StartingForm emitCreateRoom={emitCreateRoom} emitJoinRoom={emitJoinRoom}/>
       </div>
       <div className="party-view">
-        <input type="checkbox" onChange={(e)=>{}} checked={testValue} onClick={(e)=>{
-          emitTest(e.target.checked)
-          }}/>
         <Header userCount={userCount} roomName={roomName}/>
         <Scores actualScore={score} bestScore={bestScore} />
         <SlideBar
