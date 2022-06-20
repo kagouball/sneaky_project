@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
   socket.on("join_room", onJoinRoom)
 
   function onkeydown(keyCode) {
-    console.log("receive keycode : ", keyCode)
+    //console.log("receive keycode : ", keyCode)
     const roomName = clientRooms[socket.id];
     if (!roomName) {
       return;
@@ -77,18 +77,16 @@ io.on("connection", (socket) => {
 
   function onJoinRoom(roomName) {
     const room = io.sockets.adapter.rooms.get(roomName);
-    let allSockets;
-    if (room) {
-      allSockets = room.sockets;
+    if (!room) {
+      return
     }
-    let clientCount = 0;
-    if (allSockets) {
-      clientCount = Object.keys(allSockets).length;
-    }
-    if (room.size === 0) {
+
+    let playerCount = room.size;
+
+    if (playerCount === 0) {
       socket.emit('unknownCode');
       return;
-    } else if (room.size > 8) {
+    } else if (playerCount > 8) {
       socket.emit('tooManyPlayers');
       return;
     }
@@ -96,9 +94,8 @@ io.on("connection", (socket) => {
     clientRooms[socket.id] = roomName;
 
     socket.join(roomName);
-    socket.number = socket.number + 1;
 
-    io.sockets.in(roomName).emit("new_user", ({ 'count': socket.number, 'socket_id': socket.id }));
+    io.sockets.in(roomName).emit("new_user", ({ 'count': playerCount+1, 'socket_id': socket.id }));
     socket.emit('gameCode', roomName);
     socket.emit('init', state[roomName]);
   }

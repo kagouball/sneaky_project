@@ -23,6 +23,7 @@ function App() {
   useEffect(() => {
     socket.on("new_user", (data) => {
       console.log("id  : ", data.socket_id);
+      console.log("count  : ", data.count);
       setUserCount(data.count);
     });
 
