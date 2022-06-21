@@ -108,12 +108,12 @@ server.listen(3030, function () {
 
 function startGameInterval(roomName) {
   const intervalId = setInterval(() => {
-    const winner = gameLoop(state[roomName]);
+    const loosers = gameLoop(state[roomName]);
     
-    if (!winner) {
+    if (loosers.length == 0) {
       emitGameState(roomName, state[roomName])
     } else {
-      emitGameOver(roomName, winner);
+      emitGameOver(roomName, loosers);
       state[roomName] = null;
       clearInterval(intervalId);
     }
@@ -126,7 +126,7 @@ function emitGameState(room, gameState) {
     .emit('gameState', gameState);
 }
 
-function emitGameOver(room, winner) {
+function emitGameOver(room, loosers) {
   io.sockets.in(room)
-    .emit('gameOver',{ winner });
+    .emit('gameOver', loosers);
 }

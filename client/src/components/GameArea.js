@@ -37,6 +37,10 @@ class GameArea extends Component {
         this.setState({food: data.food});
       }
     })
+
+    this.props.socket.on("gameOver", (loosers) => {
+      this.onGameOver(loosers)
+    })
   }
 
   // componentWillUnmount() {
@@ -60,7 +64,7 @@ class GameArea extends Component {
   // }
 
   onGameOver() {
-    alert(`Game Over. Score : ${this.state.snakeDots.length}`)
+    alert(`Game Over`)
     this.props.changePlayingState(false);
     this.setState(initialState, () => {
       //callback because of setState being async
@@ -69,11 +73,10 @@ class GameArea extends Component {
     this.props.changeScore(0)
   }
 
-  // updateInterval()
-  // {
-  //   clearInterval(this.interval);
-  //   this.interval = setInterval(this.moveSnake,this.state.speed);
-  // }
+  updateInterval() {
+    clearInterval(this.interval);
+    this.interval = setInterval(this.moveSnake, this.state.speed);
+  }
 
   render() {
     return (
