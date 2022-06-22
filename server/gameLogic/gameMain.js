@@ -45,7 +45,7 @@ function addPlayer(state)
 {
     const playersNumber = state.players.length;
     let newPlayer = {
-        direction: [0,0],
+        direction: [0, 0],
         dots: [
             randomCoordinates_safe(state)
         ],

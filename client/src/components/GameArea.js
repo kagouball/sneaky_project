@@ -23,7 +23,7 @@ class GameArea extends Component {
     document.onkeydown = this.onKeyDown;
     this.props.changePlayingState(false);
     this.props.socket.on("gameState", (data) => {
-      this.setState({dots: data.players.map(player=>player.dots)})
+      this.setState({dots: data.players.map(player=>player.dots).flat()})
       this.setState({fieldSize: data.fieldSize})
       this.setState({food: data.food});
     });
@@ -48,7 +48,7 @@ class GameArea extends Component {
   // }
 
   onKeyDown = (e) => {
-    this.props.changePlayingState(true);
+    this.props.changePlayingState(false);
     e = e || window.event;
     this.emitKeyCode(e.keyCode)
   }

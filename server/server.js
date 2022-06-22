@@ -42,6 +42,7 @@ io.on("connection", (socket) => {
     if (!roomName) {
       return;
     }
+
     try {
       keyCode = parseInt(keyCode);
     } catch(e) {
@@ -82,7 +83,6 @@ io.on("connection", (socket) => {
     }
 
     let playerCount = room.size;
-
     if (playerCount === 0) {
       socket.emit('unknownCode');
       return;
@@ -90,9 +90,10 @@ io.on("connection", (socket) => {
       socket.emit('tooManyPlayers');
       return;
     }
+
+    socket.number = room.size + 1;
     clientRooms[socket.id] = roomName;
     addPlayer(state[roomName]);
-    console.log(state[roomName].players.length)
     socket.join(roomName);
     io.sockets.in(roomName).emit("new_user", ({ 'count': playerCount+1, 'socket_id': socket.id }));
     socket.emit('gameCode', roomName);
