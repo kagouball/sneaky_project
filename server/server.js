@@ -1,4 +1,4 @@
-const { createGameState, gameLoop } = require('./gameLogic/gameMain');
+const { createGameState, gameLoop, addPlayer } = require('./gameLogic/gameMain');
 const { getUpdatedVelocity } = require("./gameLogic/helper")
 const { makeid } = require('./utils');
 const { FRAME_RATE } = require('./constant')
@@ -90,14 +90,13 @@ io.on("connection", (socket) => {
       socket.emit('tooManyPlayers');
       return;
     }
-
     clientRooms[socket.id] = roomName;
-
+    addPlayer(state[roomName]);
+    console.log(state[roomName].players.length)
     socket.join(roomName);
-
     io.sockets.in(roomName).emit("new_user", ({ 'count': playerCount+1, 'socket_id': socket.id }));
     socket.emit('gameCode', roomName);
-    socket.emit('init', state[roomName]);
+    io.sockets.in(roomName).emit('init', state[roomName]);
   }
 });
 

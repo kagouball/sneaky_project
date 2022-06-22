@@ -4,7 +4,8 @@ const { FIELD_SIZE } = require("../constant")
 
 module.exports = {
     createGameState,
-    gameLoop
+    gameLoop,
+    addPlayer
 }
 
 function createGameState() {
@@ -26,6 +27,31 @@ function createGameState() {
     newState.food = randomFoodCoordinates(FIELD_SIZE, newState.players[0].dots);
     //console.log(newState.players[0].dots);
     return newState
+}
+
+//get random coordinate not in collision with other dots (food / snake)
+function randomCoordinates_safe(state)
+{
+    let newCoord;
+    do
+    {
+        newCoord = getRandomCoordinates(state.fieldSize);
+    }
+    while(isInASnake(state.players.map(player => player.dots), newCoord) || isOnFood(state.food,newCoord))
+    return newCoord;
+}
+
+function addPlayer(state)
+{
+    const playersNumber = state.players.length;
+    let newPlayer = {
+        direction: [0,0],
+        dots: [
+            randomCoordinates_safe(state)
+        ],
+        name: `player ${playersNumber + 1}`
+    }
+    state.players.push(newPlayer);
 }
 
 function gameLoop(state)
@@ -105,9 +131,13 @@ function enlargeSnake(player)
 function isPlayerOnFood(food, player)
 {
     let head = player.dots[player.dots.length -1];
+    return isOnFood(food, head)
+}
 
-    if(food[0] === head[0] && food[1] === head[1]){
-      return true;
+function isOnFood(food, coordinate)
+{
+    if(food[0] === coordinate[0] && food[1] === coordinate[1]){
+        return true;
     }
     return false;
 }

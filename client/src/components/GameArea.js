@@ -31,8 +31,8 @@ class GameArea extends Component {
     this.props.socket.on("init", (data) => {
       if(data)
       {
-        //console.log(data);
-        this.setState({dots: data.players.map(player=>player.dots)})
+        console.log(data);
+        this.setState({dots: data.players.map(player=>player.dots).flat()})
         this.setState({fieldSize: data.fieldSize})
         this.setState({food: data.food});
       }
@@ -81,7 +81,7 @@ class GameArea extends Component {
   render() {
     return (
       <div className="game-area" style={{ width: this.state.fieldSize*stepLength*this.props.arenaLength + "px", height: this.state.fieldSize*stepLength*this.props.arenaLength + "px" }}>
-        <Snake Dots={this.state.dots[0].map((x)=>{
+        <Snake Dots={this.state.dots.map((x)=>{
           return [x[0]*stepLength*(100/(stepLength*this.state.fieldSize)),x[1]*stepLength*(100/(stepLength*this.state.fieldSize))]
         })}
         Size={stepLength*(100/(stepLength*this.state.fieldSize))}></Snake>
