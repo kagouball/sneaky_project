@@ -6,8 +6,8 @@ const stepLength = 5;
 
 const initialState = {
   direction: -1,
-  dots: [[0,0]],
-  food: [0,0],
+  dots: [[0, 0]],
+  food: [0, 0],
   fieldSize: 0
 }
 
@@ -23,18 +23,16 @@ class GameArea extends Component {
     document.onkeydown = this.onKeyDown;
     this.props.changePlayingState(false);
     this.props.socket.on("gameState", (data) => {
-      this.setState({dots: data.players.map(player=>player.dots).flat()})
-      this.setState({fieldSize: data.fieldSize})
-      this.setState({food: data.food});
+      this.setState({ dots: data.players.map(player => player.dots).flat() })
+      this.setState({ food: data.food });
     });
-    
+
     this.props.socket.on("init", (data) => {
-      if(data)
-      {
+      if (data) {
         console.log(data);
-        this.setState({dots: data.players.map(player=>player.dots).flat()})
-        this.setState({fieldSize: data.fieldSize})
-        this.setState({food: data.food});
+        this.setState({ dots: data.players.map(player => player.dots).flat() })
+        this.setState({ fieldSize: data.fieldSize })
+        this.setState({ food: data.food });
       }
     })
 
@@ -63,7 +61,7 @@ class GameArea extends Component {
   //   }
   // }
 
-  onGameOver() {
+  onGameOver(loosers) {
     alert(`Game Over`)
     this.props.changePlayingState(false);
     this.setState(initialState, () => {
@@ -80,13 +78,13 @@ class GameArea extends Component {
 
   render() {
     return (
-      <div className="game-area" style={{ width: this.state.fieldSize*stepLength*this.props.arenaLength + "px", height: this.state.fieldSize*stepLength*this.props.arenaLength + "px" }}>
-        <Snake Dots={this.state.dots.map((x)=>{
-          return [x[0]*stepLength*(100/(stepLength*this.state.fieldSize)),x[1]*stepLength*(100/(stepLength*this.state.fieldSize))]
+      <div className="game-area" style={{ width: this.state.fieldSize * stepLength * this.props.arenaLength + "px", height: this.state.fieldSize * stepLength * this.props.arenaLength + "px" }}>
+        <Snake Dots={this.state.dots.map((x) => {
+          return [x[0] * stepLength * (100 / (stepLength * this.state.fieldSize)), x[1] * stepLength * (100 / (stepLength * this.state.fieldSize))]
         })}
-        Size={stepLength*(100/(stepLength*this.state.fieldSize))}></Snake>
-        <Food Dot={[this.state.food[0]*stepLength*(100/(stepLength*this.state.fieldSize)),this.state.food[1]*stepLength*(100/(stepLength*this.state.fieldSize))]}
-        Size={stepLength*(100/(stepLength*this.state.fieldSize))}></Food>
+          Size={stepLength * (100 / (stepLength * this.state.fieldSize))}></Snake>
+        <Food Dot={[this.state.food[0] * stepLength * (100 / (stepLength * this.state.fieldSize)), this.state.food[1] * stepLength * (100 / (stepLength * this.state.fieldSize))]}
+          Size={stepLength * (100 / (stepLength * this.state.fieldSize))}></Food>
       </div>
     )
   }

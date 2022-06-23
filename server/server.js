@@ -1,4 +1,4 @@
-const { createGameState, gameLoop, addPlayer } = require('./gameLogic/gameMain');
+const { createGameState, gameLoop, addPlayer, resetState } = require('./gameLogic/gameMain');
 const { getUpdatedVelocity } = require("./gameLogic/helper")
 const { makeid } = require('./utils');
 const { FRAME_RATE } = require('./constant')
@@ -109,13 +109,12 @@ server.listen(3030, function () {
 function startGameInterval(roomName) {
   const intervalId = setInterval(() => {
     const loosers = gameLoop(state[roomName]);
-    
     if (loosers.length == 0) {
       emitGameState(roomName, state[roomName])
     } else {
       emitGameOver(roomName, loosers);
-      state[roomName] = null;
       clearInterval(intervalId);
+      resetGame(roomName);
     }
   }, 1000 / FRAME_RATE);
 }
@@ -129,4 +128,14 @@ function emitGameState(room, gameState) {
 function emitGameOver(room, loosers) {
   io.sockets.in(room)
     .emit('gameOver', loosers);
+}
+
+function resetGame(roomName)
+{
+  //clean state
+  resetState(state[roomName]);
+  console.log(state[roomName])
+  //restart game
+  io.sockets.in(roomName).emit('init', state[roomName]);
+  startGameInterval(roomName);
 }

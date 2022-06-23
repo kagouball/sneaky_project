@@ -5,7 +5,8 @@ const { FIELD_SIZE } = require("../constant")
 module.exports = {
     createGameState,
     gameLoop,
-    addPlayer
+    addPlayer,
+    resetState
 }
 
 function createGameState() {
@@ -29,6 +30,15 @@ function createGameState() {
     return newState
 }
 
+function createEmptyGameState() {
+    //Always create game state with 1 player
+    return newState = {
+        players: [],
+        food: [],
+        fieldSize : FIELD_SIZE
+    };
+}
+
 //get random coordinate not in collision with other dots (food / snake)
 function randomCoordinates_safe(state)
 {
@@ -39,6 +49,17 @@ function randomCoordinates_safe(state)
     }
     while(isInASnake(state.players.map(player => player.dots), newCoord) || isOnFood(state.food,newCoord))
     return newCoord;
+}
+
+function resetState(state)
+{
+    //reset players dots
+    state.players.forEach((player) => {
+        player.dots= [randomCoordinates_safe(state)];
+        player.direction=[0,0];
+    });
+    //reset food
+    state.food=randomCoordinates_safe(state);
 }
 
 function addPlayer(state)
