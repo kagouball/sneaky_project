@@ -24,6 +24,7 @@ function App() {
     socket.on("new_user", (data) => {
       console.log("id  : ", data.socket_id);
       console.log("count  : ", data.count);
+      console.log("socket number  : ", socket.number);
       setUserCount(data.count);
     });
 
@@ -86,7 +87,8 @@ function App() {
           arenaLength={arenaLength}
         />
         <GameArea
-          changeScore={updateScore}
+          changeScore={setScore}
+          changeBestScore={setBestScore}
           changePlayingState={setIsPlaying}
           arenaLength={arenaLength}
           socket={socket}

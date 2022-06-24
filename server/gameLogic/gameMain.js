@@ -6,26 +6,16 @@ module.exports = {
     createGameState,
     gameLoop,
     addPlayer,
-    resetState
+    resetState,
+    createEmptyGameState
 }
 
-function createGameState() {
+function createGameState(creatorId) {
     //Always create game state with 1 player
-    let newState = {
-        players: [
-            {
-                direction: [0, 0],
-                dots: [
-                    getRandomCoordinates(FIELD_SIZE)
-                ],
-                name:"player 1"
-            }
-        ],
-        food: [],
-        fieldSize : FIELD_SIZE
-    };
-
-    newState.food = randomFoodCoordinates(FIELD_SIZE, newState.players[0].dots);
+    let newState = createEmptyGameState();
+    addPlayer(newState, creatorId);
+    //console.log(newState.players[creatorId]);
+    newState.food = randomFoodCoordinates(FIELD_SIZE, newState.players[creatorId].dots);
     //console.log(newState.players[0].dots);
     return newState
 }
@@ -33,9 +23,10 @@ function createGameState() {
 function createEmptyGameState() {
     //Always create game state with 1 player
     return newState = {
-        players: [],
+        players: {},
         food: [],
-        fieldSize : FIELD_SIZE
+        fieldSize : FIELD_SIZE,
+        bestScore: 0
     };
 }
 
@@ -47,32 +38,41 @@ function randomCoordinates_safe(state)
     {
         newCoord = getRandomCoordinates(state.fieldSize);
     }
-    while(isInASnake(state.players.map(player => player.dots), newCoord) || isOnFood(state.food,newCoord))
+    while(isInASnake(Array.from(state.players).map((id,player) => player.dots), newCoord) || isOnFood(state.food,newCoord))
     return newCoord;
 }
 
 function resetState(state)
 {
     //reset players dots
-    state.players.forEach((player) => {
+    Object.values(state.players).forEach((player) => {
         player.dots= [randomCoordinates_safe(state)];
         player.direction=[0,0];
+        player.score=0;
     });
     //reset food
     state.food=randomCoordinates_safe(state);
 }
 
-function addPlayer(state)
+function getNewPlayer(playerName)
 {
-    const playersNumber = state.players.length;
-    let newPlayer = {
+    return newPlayer = {
         direction: [0, 0],
-        dots: [
-            randomCoordinates_safe(state)
-        ],
-        name: `player ${playersNumber + 1}`
+        dots: [],
+        name: playerName,
+        score: 0
     }
-    state.players.push(newPlayer);
+}
+
+function addPlayer(state, playerId)
+{
+    //console.log("ADD PLAYER")
+    const playersNumber = Object.keys(state.players).length;
+    let newPlayer = getNewPlayer(`player ${playersNumber + 1}`);
+    newPlayer.dots.push(randomCoordinates_safe(state));
+    state.players[playerId] = newPlayer;
+    //console.log(state.players);
+    //console.log(Object.values(state.players).map(player=>player.dots).flat())
 }
 
 function gameLoop(state)
@@ -82,7 +82,7 @@ function gameLoop(state)
         return;
     }
 
-    state.players.forEach(player => {
+    Object.values(state.players).forEach((player) => {
         if(player.direction[0] == 0 && player.direction[1] == 0)
         {
             return;
@@ -92,7 +92,7 @@ function gameLoop(state)
     });
 
     let loosers = [];
-    state.players.forEach(player => {
+    Object.values(state.players).forEach(player => {
         if(isPlayerOutOfBorders(player, state.fieldSize) || isPlayerCollapsed(state.players, player))
         {
             //gameOver
@@ -123,7 +123,7 @@ function isPlayerOutOfBorders(player, fieldSize)
 
 function isPlayerCollapsed(players, player){
     //put player snake dots in last position
-    let snake = [...players.filter(p => p !== player).map(p => p.dots).flat().concat([...player.dots])];
+    let snake = [...Object.values(players).filter(p => p !== player).map(p => p.dots).flat().concat([...player.dots])];
     let head = snake[snake.length - 1];
     snake.pop();
     return snake.some(dot => {
@@ -135,11 +135,29 @@ function checkIfPlayerEat(state, player)
 {
     if(isPlayerOnFood(state.food, player))
     {
-        state.food = randomFoodCoordinates(FIELD_SIZE, state.players.map(player=>player.dots));
+        state.food = randomFoodCoordinates(FIELD_SIZE, Object.values(state.players).map(player=>player.dots));
         enlargeSnake(player);
-        //changeScore( this.state.snakeDots.length );
+        updateScore(player);
+        updateBestScore(state);
         //increaseSpeed();
     }
+}
+
+function updateBestScore(state)
+{
+    let bestScore = state.bestScore;
+    Object.values(state.players).forEach((player)=>{
+        if(player.score > bestScore)
+        {
+            bestScore = player.score;
+        }
+    })
+    state.bestScore = bestScore;
+}
+
+function updateScore(player)
+{
+    player.score = player.dots.length;
 }
 
 function enlargeSnake(player)

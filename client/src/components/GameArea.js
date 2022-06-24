@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Snake from "./Snake"
 import Food from './Food'
 
-const stepLength = 5;
+const stepLength = 1;
 
 const initialState = {
   direction: -1,
@@ -23,16 +23,23 @@ class GameArea extends Component {
     document.onkeydown = this.onKeyDown;
     this.props.changePlayingState(false);
     this.props.socket.on("gameState", (data) => {
-      this.setState({ dots: data.players.map(player => player.dots).flat() })
-      this.setState({ food: data.food });
+      if(data)
+      {
+        this.setState({ dots: Object.values(data.players).map(player => player.dots).flat() })
+        this.setState({ food: data.food });
+        this.props.changeScore(data.players[this.props.socket.id].score)
+        this.props.changeBestScore(data.bestScore);
+      }
     });
 
     this.props.socket.on("init", (data) => {
       if (data) {
         console.log(data);
-        this.setState({ dots: data.players.map(player => player.dots).flat() })
+        this.setState({ dots: Object.values(data.players).map(player => player.dots).flat() })
         this.setState({ fieldSize: data.fieldSize })
         this.setState({ food: data.food });
+        this.props.changeScore(data.players[this.props.socket.id].score)
+        this.props.changeBestScore(data.bestScore);
       }
     })
 
@@ -68,7 +75,7 @@ class GameArea extends Component {
       //callback because of setState being async
       this.updateInterval()
     })
-    this.props.changeScore(0)
+    //this.props.changeScore(0)
   }
 
   updateInterval() {

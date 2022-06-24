@@ -49,11 +49,11 @@ io.on("connection", (socket) => {
       console.error(e);
       return;
     }
-    let player = state[roomName].players[socket.number -1]
+    let player = state[roomName].players[socket.id]
     const velocity = getUpdatedVelocity(keyCode);
     if(velocity)
     {
-      state[roomName].players[socket.number -1].direction = velocity;
+      state[roomName].players[socket.id].direction = velocity;
     }
   }
 
@@ -63,13 +63,12 @@ io.on("connection", (socket) => {
     console.log(roomName);
     socket.emit('gameCode', roomName);
 
-    let initialState = createGameState();
+    let initialState = createGameState(socket.id);
     //console.log(initialState.players[0].dots)
     state[roomName] = initialState;
 
     socket.join(roomName);
-    socket.number = 1;
-    socket.emit("new_user", ({ 'count': socket.number, 'socket_id': socket.id }));
+    socket.emit("new_user", ({ 'count': 1, 'socket_id': socket.id }));
     //console.log(`Init with ${state[roomName]}`)
     socket.emit("init", state[roomName])
 
@@ -91,9 +90,8 @@ io.on("connection", (socket) => {
       return;
     }
 
-    socket.number = room.size + 1;
     clientRooms[socket.id] = roomName;
-    addPlayer(state[roomName]);
+    addPlayer(state[roomName],socket.id);
     socket.join(roomName);
     io.sockets.in(roomName).emit("new_user", ({ 'count': playerCount+1, 'socket_id': socket.id }));
     socket.emit('gameCode', roomName);
