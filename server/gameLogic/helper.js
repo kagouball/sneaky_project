@@ -1,7 +1,10 @@
+const { isOnFood } = require("./foodManagment")
+
 module.exports = {
   getRandomCoordinates,
   isInASnake,
-  getUpdatedVelocity
+  getUpdatedVelocity,
+  randomCoordinates_safe
 }
 
 function getRandomCoordinates(fieldSize)
@@ -40,4 +43,16 @@ function getUpdatedVelocity(keyCode) {
       return [0, -1];
     }
   }
+}
+
+//get random coordinate not in collision with other dots (food / snake)
+function randomCoordinates_safe(state)
+{
+    let newCoord;
+    do
+    {
+        newCoord = getRandomCoordinates(state.fieldSize);
+    }
+    while(isInASnake(Array.from(state.players).map((id,player) => player.dots), newCoord) || isOnFood(state.food,newCoord))
+    return newCoord;
 }

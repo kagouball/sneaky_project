@@ -88,10 +88,11 @@ io.on("connection", (socket) => {
 
     clientRooms[socket.id] = roomName;
     addPlayer(state[roomName],socket.id);
+
     socket.join(roomName);
     io.sockets.in(roomName).emit("new_user", ({ 'count': playerCount+1, 'socket_id': socket.id }));
-    socket.emit('gameCode', roomName);
     io.sockets.in(roomName).emit('init', state[roomName]);
+    socket.emit('gameCode', roomName);
   }
 });
 
@@ -128,7 +129,6 @@ function resetGame(roomName)
 {
   //clean state
   resetState(state[roomName]);
-  console.log(state[roomName])
   //restart game
   io.sockets.in(roomName).emit('init', state[roomName]);
   startGameInterval(roomName);

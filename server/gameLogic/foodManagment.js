@@ -1,15 +1,11 @@
-const {getRandomCoordinates, isInASnake} = require("./helper")
-
 module.exports = {
-    randomFoodCoordinates
+    isOnFood
 }
 
-function randomFoodCoordinates(fieldSize, snakeDots) {
-    let foodInSnake = true;
-    let newFood;
-    while (foodInSnake) {
-        newFood = getRandomCoordinates(fieldSize);
-        foodInSnake = isInASnake(snakeDots, newFood)
+function isOnFood(food, coordinate)
+{
+    if(food[0] === coordinate[0] && food[1] === coordinate[1]){
+        return true;
     }
-    return newFood
+    return false;
 }
