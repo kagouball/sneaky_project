@@ -1,7 +1,7 @@
 const { createGameState, gameLoop, addPlayer, resetState } = require('./gameLogic/gameMain');
 const { getUpdatedVelocity } = require("./gameLogic/helper")
 const { makeid } = require('./utils');
-const { FRAME_RATE } = require('./constant')
+const { FRAME_RATE, MAX_PLAYER } = require('./constant')
 
 const express = require("express");
 const cors = require("cors");
@@ -24,7 +24,7 @@ app.get("/", function (req, res) {
   res.sendFile("index.html", { root: __dirname });
 });
 
-//etablissement de la connexion
+//Connexion
 io.on("connection", (socket) => {
   console.log(`New user connect : ${socket.id}`);
 
@@ -37,19 +37,16 @@ io.on("connection", (socket) => {
   socket.on("join_room", onJoinRoom)
 
   function onkeydown(keyCode) {
-    //console.log("receive keycode : ", keyCode)
     const roomName = clientRooms[socket.id];
     if (!roomName) {
       return;
     }
-
     try {
       keyCode = parseInt(keyCode);
     } catch(e) {
       console.error(e);
       return;
     }
-    let player = state[roomName].players[socket.id]
     const velocity = getUpdatedVelocity(keyCode);
     if(velocity)
     {
@@ -60,16 +57,14 @@ io.on("connection", (socket) => {
   function onCreateRoom() {
     let roomName = makeid(5);
     clientRooms[socket.id] = roomName;
-    console.log(roomName);
-    socket.emit('gameCode', roomName);
-
+    console.log(`roomName created : ${roomName}`);
+    
     let initialState = createGameState(socket.id);
-    //console.log(initialState.players[0].dots)
     state[roomName] = initialState;
 
     socket.join(roomName);
+    socket.emit('gameCode', roomName);
     socket.emit("new_user", ({ 'count': 1, 'socket_id': socket.id }));
-    //console.log(`Init with ${state[roomName]}`)
     socket.emit("init", state[roomName])
 
     startGameInterval(roomName);
@@ -85,7 +80,7 @@ io.on("connection", (socket) => {
     if (playerCount === 0) {
       socket.emit('unknownCode');
       return;
-    } else if (playerCount > 8) {
+    } else if (playerCount > MAX_PLAYER) {
       socket.emit('tooManyPlayers');
       return;
     }
