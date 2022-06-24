@@ -73,11 +73,12 @@ io.on("connection", (socket) => {
   function onJoinRoom(roomName) {
     const room = io.sockets.adapter.rooms.get(roomName);
     if (!room) {
+      socket.emit('unknownCode');
       return
     }
 
     let playerCount = room.size;
-    if (playerCount === 0) {
+    if (playerCount == 0) {
       socket.emit('unknownCode');
       return;
     } else if (playerCount > MAX_PLAYER) {

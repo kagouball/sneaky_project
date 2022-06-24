@@ -31,3 +31,7 @@
 .start-view{
   visibility: visible;
 }
+
+.error-message{
+  color: red;
+}
