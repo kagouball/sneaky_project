@@ -21,31 +21,39 @@ class GameArea extends Component {
 
   componentDidMount() {
     document.onkeydown = this.onKeyDown;
-    this.props.changePlayingState(false);
+    
     this.props.socket.on("gameState", (data) => {
-      if(data)
-      {
-        this.setState({ dots: Object.values(data.players).map(player => player.dots).flat() })
-        this.setState({ food: data.food });
-        this.props.changeScore(data.players[this.props.socket.id].score)
-        this.props.changeBestScore(data.bestScore);
-      }
+      this.onGameState(data)
     });
 
     this.props.socket.on("init", (data) => {
-      if (data) {
-        console.log(data);
-        this.setState({ dots: Object.values(data.players).map(player => player.dots).flat() })
-        this.setState({ fieldSize: data.fieldSize })
-        this.setState({ food: data.food });
-        this.props.changeScore(data.players[this.props.socket.id].score)
-        this.props.changeBestScore(data.bestScore);
-      }
+      this.oninitialization(data);
     })
 
     this.props.socket.on("gameOver", (loosers) => {
       this.onGameOver(loosers)
     })
+  }
+
+  onGameState(data) {
+    if (data) {
+      this.setState({ dots: Object.values(data.players).map(player => player.dots).flat() })
+      this.setState({ food: data.food });
+      this.props.changeScore(data.players[this.props.socket.id].score)
+      this.props.changeBestScore(data.bestScore);
+    }
+  }
+
+  oninitialization(data)
+  {
+    if (data) {
+      console.log(data);
+      this.setState({ dots: Object.values(data.players).map(player => player.dots).flat() })
+      this.setState({ fieldSize: data.fieldSize })
+      this.setState({ food: data.food });
+      this.props.changeScore(data.players[this.props.socket.id].score)
+      this.props.changeBestScore(data.bestScore);
+    }
   }
 
   onKeyDown = (e) => {
