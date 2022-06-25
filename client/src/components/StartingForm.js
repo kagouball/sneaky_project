@@ -1,6 +1,15 @@
 import React, { Component } from 'react'
+import { CirclePicker, GithubPicker, SketchPicker } from 'react-color';
 
 class StartingForm extends Component{
+
+    state = {
+        background: '#fff',
+    };
+
+    handleChangeComplete = (color) => {
+        this.setState({background: color.hex})
+    }
 
     componentDidMount()
     {
@@ -21,6 +30,12 @@ class StartingForm extends Component{
     {
         return(
         <div>
+            <div>
+                <p>Choose your snake colour</p>
+                <GithubPicker
+                color={this.state.background}
+                onChangeComplete={this.handleChangeComplete}/>
+            </div>
             <div>
                 <p>Create new party</p>
                 <button onClick={()=>{this.props.emitCreateRoom()}}>Create</button>
