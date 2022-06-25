@@ -14,6 +14,7 @@ const StartingForm = ({emitCreateRoom, emitJoinRoom}) => {
                    let text = document.getElementsByClassName("roomName")[0].value;
                    emitJoinRoom(text);
                }}>Join</button>
+               <p className='error-message'></p>
            </div>
        </div> 
     )
