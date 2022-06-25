@@ -48,50 +48,32 @@ class GameArea extends Component {
     })
   }
 
-  // componentWillUnmount() {
-  //   clearInterval(this.interval);
-  // }
-
   onKeyDown = (e) => {
     this.props.changePlayingState(false);
     e = e || window.event;
     this.emitKeyCode(e.keyCode)
   }
 
-  // increaseSpeed() {
-  //   if(this.state.speed > 10){
-  //     this.setState({
-  //       speed : this.state.speed - 10
-  //     })
-  //     clearInterval(this.interval)
-  //     this.interval = setInterval(this.moveSnake,this.state.speed);
-  //   }
-  // }
-
   onGameOver(loosers) {
     alert(`Game Over`)
     this.props.changePlayingState(false);
-    this.setState(initialState, () => {
-      //callback because of setState being async
-      this.updateInterval()
-    })
-    //this.props.changeScore(0)
+    this.setState(initialState)
   }
 
-  updateInterval() {
-    clearInterval(this.interval);
-    this.interval = setInterval(this.moveSnake, this.state.speed);
+  getActualSize()
+  {
+    return stepLength * (100 / (stepLength * this.state.fieldSize));
   }
 
   render() {
     return (
       <div className="game-area" style={{ width: this.state.fieldSize * stepLength * this.props.arenaLength + "px", height: this.state.fieldSize * stepLength * this.props.arenaLength + "px" }}>
         <Snake Dots={this.state.dots.map((x) => {
-          return [x[0] * stepLength * (100 / (stepLength * this.state.fieldSize)), x[1] * stepLength * (100 / (stepLength * this.state.fieldSize))]
+          return [x[0] * this.getActualSize(), x[1] * this.getActualSize()]
         })}
-          Size={stepLength * (100 / (stepLength * this.state.fieldSize))}></Snake>
-        <Food Dot={[this.state.food[0] * stepLength * (100 / (stepLength * this.state.fieldSize)), this.state.food[1] * stepLength * (100 / (stepLength * this.state.fieldSize))]}
-          Size={stepLength * (100 / (stepLength * this.state.fieldSize))}></Food>
+          Size={this.getActualSize()}></Snake>
+        <Food Dot={[this.state.food[0] * this.getActualSize(), this.state.food[1] * this.getActualSize()]}
+          Size={this.getActualSize()}></Food>
       </div>
     )
   }

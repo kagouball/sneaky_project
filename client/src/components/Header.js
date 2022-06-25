@@ -13,10 +13,14 @@ const Header = ({ userCount, title, roomName }) => {
 
 Header.defaultProps = {
   title: "SNAKE VERSUS",
+  userCount: 1,
+  roomName: "NO GAMECODE"
 };
 
 Header.propTypes = {
   title: PropTypes.string,
+  userCount: PropTypes.number,
+  roomName: PropTypes.string
 };
 
 export default Header;

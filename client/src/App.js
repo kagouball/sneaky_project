@@ -17,21 +17,15 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [arenaLength, setArenaLength] = useState(20);
   const [userCount, setUserCount] = useState(0);
-  const [isInParty, setIsInParty] = useState(false);
   const [roomName, setRoomName] = useState("");
 
   useEffect(() => {
     socket.on("new_user", (data) => {
-      console.log("id  : ", data.socket_id);
-      console.log("count  : ", data.count);
-      console.log("socket number  : ", socket.number);
       setUserCount(data.count);
     });
 
     socket.on("gameCode", (roomName) => {
-      setIsInParty(true);
       setRoomName(roomName);
-      console.log("gamecode passing here")
       hideStartView();
       displayPartyView();
     })
@@ -62,13 +56,6 @@ function App() {
 
   }
 
-  const updateScore = (score) => {
-    if (score > bestScore) {
-      setBestScore(score);
-    }
-    setScore(score);
-  };
-
   const updateArenaLength = (length) => {
     if (!isPlaying) {
       setArenaLength(length);
@@ -76,7 +63,6 @@ function App() {
   };
 
   const emitCreateRoom = () => {
-    console.log("try to create room")
     socket.emit("create_room");
   }
 

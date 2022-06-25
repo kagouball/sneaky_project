@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Slider from '@mui/material/Slider';
 
 class SlideBar extends Component{
-    
+
     onSliderChangeValue(value){
         this.props.changeArenaLength(value)
     }
