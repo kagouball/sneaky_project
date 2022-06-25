@@ -29,19 +29,7 @@ function App() {
       hideStartView();
       displayPartyView();
     })
-
-    socket.on("unknownCode", ()=>{
-      showErrorOnForm("The code does not exist");
-    })
-    socket.on("tooManyPlayers", ()=>{
-      showErrorOnForm("The room is full");
-    })
   }, [])
-
-  const showErrorOnForm = (message) => {
-    let error_zone = document.getElementsByClassName("error-message")[0];
-    error_zone.textContent = message;
-  }
 
   const hideStartView = () => {
     let startView = document.getElementsByClassName("start-view")[0];
@@ -53,7 +41,6 @@ function App() {
     let partyView = document.getElementsByClassName("party-view")[0];
     partyView.style.visibility = "visible";
     partyView.style.display = "block";
-
   }
 
   const updateArenaLength = (length) => {
@@ -74,7 +61,7 @@ function App() {
   return (
     <div className="container">
       <div className="start-view">
-        <StartingForm emitCreateRoom={emitCreateRoom} emitJoinRoom={emitJoinRoom}/>
+        <StartingForm emitCreateRoom={emitCreateRoom} emitJoinRoom={emitJoinRoom} socket={socket}/>
       </div>
       <div className="party-view">
         <Header userCount={userCount} roomName={roomName}/>

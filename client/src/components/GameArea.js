@@ -21,7 +21,7 @@ class GameArea extends Component {
 
   componentDidMount() {
     document.onkeydown = this.onKeyDown;
-    
+
     this.props.socket.on("gameState", (data) => {
       this.onGameState(data)
     });
