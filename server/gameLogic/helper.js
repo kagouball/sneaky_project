@@ -20,7 +20,7 @@ function getRandomCoordinates(fieldSize)
 function isInASnake(snakesDots, coords){
     let coordsInSnake = false;
     snakesDots.forEach(dot => {
-      if (coords[0] === dot[0] && coords[1] === dot[1]){
+      if (coords[0] == dot[0] && coords[1] == dot[1]){
         coordsInSnake = true;
         return
       }
@@ -53,6 +53,6 @@ function randomCoordinates_safe(state)
     {
         newCoord = getRandomCoordinates(state.fieldSize);
     }
-    while(isInASnake(Array.from(state.players).map((id,player) => player.dots), newCoord) || isOnFood(state.food,newCoord))
+    while(isInASnake(Object.values(state.players).map(player => player.dots).flat(), newCoord) || isOnFood(state.food,newCoord))
     return newCoord;
 }
