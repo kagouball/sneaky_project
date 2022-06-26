@@ -60,7 +60,7 @@ io.on("connection", (socket) => {
     console.log(`roomName created : ${roomName}`);
     
     let initialState = createGameState(socket.id);
-    initialState.players[socket.id].color = data.player_color;
+    addPlayer(initialState,socket.id,data.player_color)
     state[roomName] = initialState;
 
     socket.join(roomName);
@@ -71,8 +71,8 @@ io.on("connection", (socket) => {
     startGameInterval(roomName);
   }
 
-  function onJoinRoom(roomName) {
-    const room = io.sockets.adapter.rooms.get(roomName);
+  function onJoinRoom(data) {
+    const room = io.sockets.adapter.rooms.get(data.roomName);
     if (!room) {
       socket.emit('unknownCode');
       return
@@ -87,13 +87,13 @@ io.on("connection", (socket) => {
       return;
     }
 
-    clientRooms[socket.id] = roomName;
-    addPlayer(state[roomName],socket.id);
+    clientRooms[socket.id] = data.roomName;
+    addPlayer(state[data.roomName],socket.id, data.player_color);
 
-    socket.join(roomName);
-    io.sockets.in(roomName).emit("new_user", ({ 'count': playerCount+1, 'socket_id': socket.id }));
-    io.sockets.in(roomName).emit('init', state[roomName]);
-    socket.emit('gameCode', roomName);
+    socket.join(data.roomName);
+    io.sockets.in(data.roomName).emit("new_user", ({ 'count': playerCount+1, 'socket_id': socket.id }));
+    io.sockets.in(data.roomName).emit('init', state[data.roomName]);
+    socket.emit('gameCode', data.roomName);
   }
 });
 

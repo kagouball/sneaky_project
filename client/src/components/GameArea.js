@@ -75,16 +75,21 @@ class GameArea extends Component {
     return stepLength * (100 / (stepLength * this.state.fieldSize));
   }
 
+  snakesToElement()
+  {
+    return Object.values(this.state.snakes).map(
+      snake=>snake.dots.map((dot)=>{
+        return {'color':snake.color,'dot':dot}
+      })
+      ).flat()
+  }
+
   render() {
     return (
       <div className="game-area" style={{ width: this.state.fieldSize * stepLength * this.props.arenaLength + "px", height: this.state.fieldSize * stepLength * this.props.arenaLength + "px" }}>
         <Food Dot={[this.state.food[0] * this.getActualSize(), this.state.food[1] * this.getActualSize()]}
           Size={this.getActualSize()}></Food>
-        <Snake Elements={Object.values(this.state.snakes).map(
-          snake=>snake.dots.map((dot)=>{
-            return {'color':snake.color,'dot':dot}
-          })
-          ).flat()}
+        <Snake Elements={this.snakesToElement()}
           Size={this.getActualSize()}></Snake>
       </div>
     )

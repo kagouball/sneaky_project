@@ -13,9 +13,7 @@ module.exports = {
 // STATE MANAGMENT
 
 function createGameState(creatorId) {
-    //Always create game state with 1 player
     let newState = createEmptyGameState();
-    addPlayer(newState, creatorId);
     newState.food = randomCoordinates_safe(newState);
     return newState
 }
@@ -49,15 +47,16 @@ function getNewPlayer(playerName)
         dots: [],
         name: playerName,
         score: 0,
-        color: '#fff'
+        color: '#000'
     }
 }
 
-function addPlayer(state, playerId)
+function addPlayer(state, playerId, color)
 {
     const playersNumber = Object.keys(state.players).length;
     let newPlayer = getNewPlayer(`player ${playersNumber + 1}`);
     newPlayer.dots.push(randomCoordinates_safe(state));
+    newPlayer.color = color;
     state.players[playerId] = newPlayer;
 }
 

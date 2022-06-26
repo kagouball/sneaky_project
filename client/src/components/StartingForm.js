@@ -4,7 +4,8 @@ import { CirclePicker, GithubPicker, SketchPicker } from 'react-color';
 class StartingForm extends Component{
 
     state = {
-        player_color: '#fff',
+        player_color: '#000',
+        roomName: ""
     };
 
     handleChangeComplete = (color) => {
@@ -30,9 +31,9 @@ class StartingForm extends Component{
         this.props.socket.emit("create_room", this.state);
     }
     
-    emitJoinRoom = (roomName) => {
-        console.log("try to Join room : ",roomName)
-        this.props.socket.emit("join_room", roomName);
+    emitJoinRoom = () => {
+        console.log("try to Join room : ",this.state.roomName)
+        this.props.socket.emit("join_room", this.state);
     }
 
     render()
@@ -54,7 +55,7 @@ class StartingForm extends Component{
                 <input type='text' className='roomName'></input>
                 <button onClick={()=>{
                     let text = document.getElementsByClassName("roomName")[0].value;
-                    this.emitJoinRoom(text);
+                    this.setState({roomName: text}, ()=>this.emitJoinRoom());
                 }}>Join</button>
                 <p className='error-message'></p>
             </div>
