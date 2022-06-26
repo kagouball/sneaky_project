@@ -49,19 +49,10 @@ function App() {
     }
   };
 
-  const emitCreateRoom = () => {
-    socket.emit("create_room");
-  }
-
-  const emitJoinRoom = (roomName) => {
-    console.log("try to Join room : ",roomName)
-    socket.emit("join_room", roomName);
-  }
-
   return (
     <div className="container">
       <div className="start-view">
-        <StartingForm emitCreateRoom={emitCreateRoom} emitJoinRoom={emitJoinRoom} socket={socket}/>
+        <StartingForm socket={socket}/>
       </div>
       <div className="party-view">
         <Header userCount={userCount} roomName={roomName}/>

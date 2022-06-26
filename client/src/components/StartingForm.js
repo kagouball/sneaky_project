@@ -1,6 +1,16 @@
 import React, { Component } from 'react'
+import { GithubPicker } from 'react-color';
 
 class StartingForm extends Component{
+
+    state = {
+        player_color: '#000',
+        roomName: ""
+    };
+
+    handleChangeComplete = (color) => {
+        this.setState({player_color: color.hex})
+    }
 
     componentDidMount()
     {
@@ -17,20 +27,35 @@ class StartingForm extends Component{
         error_zone.textContent = message;
     }
 
+    emitCreateRoom = () => {
+        this.props.socket.emit("create_room", this.state);
+    }
+    
+    emitJoinRoom = () => {
+        console.log("try to Join room : ",this.state.roomName)
+        this.props.socket.emit("join_room", this.state);
+    }
+
     render()
     {
         return(
         <div>
             <div>
+                <p>Choose your snake colour</p>
+                <GithubPicker
+                color={this.state.background}
+                onChangeComplete={this.handleChangeComplete}/>
+            </div>
+            <div>
                 <p>Create new party</p>
-                <button onClick={()=>{this.props.emitCreateRoom()}}>Create</button>
+                <button onClick={()=>{this.emitCreateRoom()}}>Create</button>
             </div>
             <div>
                 <p>Join party</p>
                 <input type='text' className='roomName'></input>
                 <button onClick={()=>{
                     let text = document.getElementsByClassName("roomName")[0].value;
-                    this.props.emitJoinRoom(text);
+                    this.setState({roomName: text}, ()=>this.emitJoinRoom());
                 }}>Join</button>
                 <p className='error-message'></p>
             </div>
