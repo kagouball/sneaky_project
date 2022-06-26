@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { CirclePicker, GithubPicker, SketchPicker } from 'react-color';
+import { GithubPicker } from 'react-color';
 
 class StartingForm extends Component{
 
