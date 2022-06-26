@@ -6,7 +6,7 @@ const stepLength = 1;
 
 const initialState = {
   direction: -1,
-  dots: [[0, 0]],
+  snakes: {},
   food: [0, 0],
   fieldSize: 0
 }
@@ -37,7 +37,9 @@ class GameArea extends Component {
 
   onGameState(data) {
     if (data) {
-      this.setState({ dots: Object.values(data.players).map(player => player.dots).flat() })
+      //this.setState({ dots: Object.values(data.players).reduce((acc, player) => ({...acc, [player.color]: player.dots}))})
+      this.setState(({ snakes: data.players}))
+      //console.log(Object.values(this.state.players))
       this.setState({ food: data.food });
       this.props.changeScore(data.players[this.props.socket.id].score)
       this.props.changeBestScore(data.bestScore);
@@ -48,7 +50,7 @@ class GameArea extends Component {
   {
     if (data) {
       console.log(data);
-      this.setState({ dots: Object.values(data.players).map(player => player.dots).flat() })
+      this.setState({ snakes: data.players})
       this.setState({ fieldSize: data.fieldSize })
       this.setState({ food: data.food });
       this.props.changeScore(data.players[this.props.socket.id].score)
@@ -78,9 +80,11 @@ class GameArea extends Component {
       <div className="game-area" style={{ width: this.state.fieldSize * stepLength * this.props.arenaLength + "px", height: this.state.fieldSize * stepLength * this.props.arenaLength + "px" }}>
         <Food Dot={[this.state.food[0] * this.getActualSize(), this.state.food[1] * this.getActualSize()]}
           Size={this.getActualSize()}></Food>
-        <Snake Dots={this.state.dots.map((x) => {
-          return [x[0] * this.getActualSize(), x[1] * this.getActualSize()]
-        })}
+        <Snake Elements={Object.values(this.state.snakes).map(
+          snake=>snake.dots.map((dot)=>{
+            return {'color':snake.color,'dot':dot}
+          })
+          ).flat()}
           Size={this.getActualSize()}></Snake>
       </div>
     )

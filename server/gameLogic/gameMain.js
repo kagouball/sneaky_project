@@ -48,7 +48,8 @@ function getNewPlayer(playerName)
         direction: [0, 0],
         dots: [],
         name: playerName,
-        score: 0
+        score: 0,
+        color: '#fff'
     }
 }
 

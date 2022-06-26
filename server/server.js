@@ -54,12 +54,13 @@ io.on("connection", (socket) => {
     }
   }
 
-  function onCreateRoom() {
+  function onCreateRoom(data) {
     let roomName = makeid(5);
     clientRooms[socket.id] = roomName;
     console.log(`roomName created : ${roomName}`);
     
     let initialState = createGameState(socket.id);
+    initialState.players[socket.id].color = data.player_color;
     state[roomName] = initialState;
 
     socket.join(roomName);
