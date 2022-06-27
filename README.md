@@ -39,7 +39,7 @@ npm install
 
 In `.\client` folder, build the react application with 
 ```
-node build
+npm run build
 ``` 
 
 Everything is set-upto run this beautiful app!
