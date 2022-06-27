@@ -65,7 +65,7 @@ class GameArea extends Component {
   }
 
   onGameOver(loosers) {
-    alert(`Game Over`)
+    //alert(`Game Over`)
     this.props.changePlayingState(false);
     this.setState(initialState)
   }
