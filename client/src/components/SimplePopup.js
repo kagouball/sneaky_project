@@ -1,11 +1,24 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 
-const SimplePopup = () => {
-    return(
-        <Popup trigger={<button className="button"> Open Modal </button>} modal>
-            <div  style={{ width: "200px", height: "200px" }}> Modal content </div>
-        </Popup>
+const SimplePopup = ({ loosers, isActive, closePopup }) => {
+
+    return (
+        <div>
+            {isActive ?
+                <div className='popup'>
+                    < div className='popup_inner' >
+                        <h1>GAME OVER</h1>
+                        <h2>Loosers : {loosers}</h2>
+                        <button onClick={closePopup}>continue</button>
+                    </div >
+                </div >
+                :
+                null
+            }
+        </div>
+        
+       
     );
 }
 

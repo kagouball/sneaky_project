@@ -10,12 +10,16 @@ const initialState = {
   direction: -1,
   snakes: {},
   food: [0, 0],
-  fieldSize: 0
+  fieldSize: 0,
 }
 
 class GameArea extends Component {
 
   state = initialState;
+  gameOverState = {
+    isGameOver: false,
+    loosers: "no one"
+  }
 
   emitKeyCode(keyCode) {
     this.props.socket.emit("keydown", keyCode);
@@ -67,9 +71,15 @@ class GameArea extends Component {
   }
 
   onGameOver(loosers) {
-    //alert(`Game Over`)
     this.props.changePlayingState(false);
-    this.setState(initialState)
+    this.setState(initialState);
+   this.gameOverState.isGameOver = true;
+    //show loosers
+    let sentence = "";
+    this.gameOverState.loosers = loosers.reduce(
+      (prev, cur) => prev + " " + cur.name,
+      sentence
+    );
   }
 
   getActualSize()
@@ -86,10 +96,19 @@ class GameArea extends Component {
       ).flat()
   }
 
+  closePopup()
+  {
+      this.gameOverState.isGameOver = false;
+  }
+
   render() {
     return (
       <div className="game-area" style={{ width: this.state.fieldSize * stepLength * this.props.arenaLength + "px", height: this.state.fieldSize * stepLength * this.props.arenaLength + "px" }}>
-        <SimplePopup/>
+        <SimplePopup 
+          loosers={this.gameOverState.loosers}
+          isActive={this.gameOverState.isGameOver}
+          closePopup={this.closePopup.bind(this)}
+          />
         <Food Dot={[this.state.food[0] * this.getActualSize(), this.state.food[1] * this.getActualSize()]}
           Size={this.getActualSize()}></Food>
         <Snake Elements={this.snakesToElement()}
