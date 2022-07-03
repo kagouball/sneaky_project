@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Snake from "./Snake"
 import Food from './Food'
+import SimplePopup from './SimplePopup';
+import 'reactjs-popup/dist/index.css';
 
 const stepLength = 1;
 
@@ -87,6 +89,7 @@ class GameArea extends Component {
   render() {
     return (
       <div className="game-area" style={{ width: this.state.fieldSize * stepLength * this.props.arenaLength + "px", height: this.state.fieldSize * stepLength * this.props.arenaLength + "px" }}>
+        <SimplePopup/>
         <Food Dot={[this.state.food[0] * this.getActualSize(), this.state.food[1] * this.getActualSize()]}
           Size={this.getActualSize()}></Food>
         <Snake Elements={this.snakesToElement()}
