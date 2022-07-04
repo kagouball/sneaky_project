@@ -65,6 +65,10 @@ class GameArea extends Component {
   }
 
   onKeyDown = (e) => {
+    if(this.gameOverState.isGameOver)
+    {
+      return
+    }
     this.props.changePlayingState(false);
     e = e || window.event;
     this.emitKeyCode(e.keyCode)
@@ -104,11 +108,12 @@ class GameArea extends Component {
   render() {
     return (
       <div className="game-area" style={{ width: this.state.fieldSize * stepLength * this.props.arenaLength + "px", height: this.state.fieldSize * stepLength * this.props.arenaLength + "px" }}>
-        <SimplePopup 
+        {this.gameOverState.isGameOver?
+          <SimplePopup 
           loosers={this.gameOverState.loosers}
-          isActive={this.gameOverState.isGameOver}
           closePopup={this.closePopup.bind(this)}
           />
+        : null}
         <Food Dot={[this.state.food[0] * this.getActualSize(), this.state.food[1] * this.getActualSize()]}
           Size={this.getActualSize()}></Food>
         <Snake Elements={this.snakesToElement()}
