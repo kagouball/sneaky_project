@@ -13,7 +13,6 @@ const SimplePopup = ({ loosers, closePopup }) => {
                 </div >
             </div >
         </div>
-
     );
 }
 
