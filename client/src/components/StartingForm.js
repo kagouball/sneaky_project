@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { GithubPicker } from 'react-color';
+import Input from '@mui/material/Input';
 
 class StartingForm extends Component{
 
@@ -48,6 +49,21 @@ class StartingForm extends Component{
             </div>
             <div>
                 <p>Create new party</p>
+                    <p><Input
+                        id="outlined-number"
+                        label="Field size"
+                        type="number"
+                        inputProps={{
+                            min: 5,
+                            max: 100,
+                            step: 5,
+                            defaultValue: 20,
+                            inputMode: 'decimal'
+                        }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    /></p>
                 <button onClick={()=>{this.emitCreateRoom()}}>Create</button>
             </div>
             <div>
