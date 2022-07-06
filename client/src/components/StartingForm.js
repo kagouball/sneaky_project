@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { GithubPicker } from 'react-color';
+import Slider from '@mui/material/Slider';
 
 class StartingForm extends Component{
 
     state = {
         player_color: '#000',
-        roomName: ""
+        roomName: "",
+        fieldSize: 10
     };
 
     handleChangeComplete = (color) => {
@@ -48,6 +50,14 @@ class StartingForm extends Component{
             </div>
             <div>
                 <p>Create new party</p>
+                <p>field Size : {this.state.fieldSize}</p>
+                    <p><Slider 
+              value={this.state.fieldSize} 
+              step={5}
+              marks 
+              min={5} 
+              max={100} 
+              onChange={(e, val) => this.setState({fieldSize:val})}/></p>
                 <button onClick={()=>{this.emitCreateRoom()}}>Create</button>
             </div>
             <div>
