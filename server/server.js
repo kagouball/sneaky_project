@@ -60,7 +60,8 @@ io.on("connection", (socket) => {
     console.log(`roomName created : ${roomName}`);
     
     let initialState = createGameState(socket.id);
-    addPlayer(initialState,socket.id,data.player_color)
+    initialState.fieldSize = data.fieldSize;
+    addPlayer(initialState,socket.id,data.player_color);
     state[roomName] = initialState;
 
     socket.join(roomName);
