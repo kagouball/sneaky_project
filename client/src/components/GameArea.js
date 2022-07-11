@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Snake from "./Snake"
 import Food from './Food'
 import SimplePopup from './SimplePopup';
-import 'reactjs-popup/dist/index.css';
 
 const stepLength = 1;
 
