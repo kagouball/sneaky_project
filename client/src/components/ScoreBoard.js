@@ -3,22 +3,25 @@ import React from 'react';
 const ScoreBoard = ({ players }) => {
     return (
         <div className='score-board'>
-            <h2>ScoreBoard</h2>
+            <h2>Score Board</h2>
             <table>
                 <tbody>
                     <tr>
-                        <th>Color</th>
+                        <th></th>
                         <th>Name</th>
-                        <th>Snake length</th>
                         <th>Score</th>
+                        <th>Game win</th>
                     </tr>
                     {
                         Object.values(players).map((player,i) => {
+                            const colorStyle ={
+                                backgroundColor: `${player.color}`
+                            }
                             return (
                                 <tr key={i}>
-                                    <td>{player.color}</td>
+                                    <td style={colorStyle}/>
                                     <td>{player.name}</td>
-                                    <td>{player.dots.length}</td>
+                                    <td>{player.score}</td>
                                     <td>{player.score}</td>
                                 </tr>
                             )
@@ -29,6 +32,5 @@ const ScoreBoard = ({ players }) => {
         </div>
     )
 }
-
 
 export default ScoreBoard;
