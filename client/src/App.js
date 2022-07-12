@@ -2,11 +2,11 @@ import React, { Component, useState } from "react";
 import Header from "./components/Header";
 import Scores from "./components/Scores";
 import GameArea from "./components/GameArea";
-import SlideBar from "./components/SlideBar";
 import Field from "./components/FieldTest/Field";
 import socketIOClient from "socket.io-client";
 import StartingForm from "./components/StartingForm";
 import { useEffect } from "react";
+import Settings from "./components/Settings";
 
 const ENDPOINT = "http://127.0.0.1:3030";
 const socket = socketIOClient.connect(ENDPOINT)
@@ -18,6 +18,7 @@ function App() {
   const [arenaLength, setArenaLength] = useState(20);
   const [userCount, setUserCount] = useState(0);
   const [roomName, setRoomName] = useState("");
+  const [isSettingsOpen, openSettings] = useState(false);
 
   useEffect(() => {
     socket.on("new_user", (data) => {
@@ -57,17 +58,19 @@ function App() {
       <div className="party-view">
         <Header userCount={userCount} roomName={roomName}/>
         <Scores actualScore={score} bestScore={bestScore} />
-        <SlideBar
-          gameOn={isPlaying}
-          changeArenaLength={updateArenaLength}
-          arenaLength={arenaLength}
-        />
         <GameArea
           changeScore={setScore}
           changeBestScore={setBestScore}
           changePlayingState={setIsPlaying}
           arenaLength={arenaLength}
           socket={socket}
+          isSettingsOpen={isSettingsOpen}
+        />
+        <Settings
+        updateArenaLength={updateArenaLength}
+        arenaLength={arenaLength}
+        isSettingsOpen={isSettingsOpen}
+        openSettings={openSettings}
         />
         {/* <Field draw={draw}/> */}
       </div>

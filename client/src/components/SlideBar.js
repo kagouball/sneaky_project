@@ -4,20 +4,21 @@ import Slider from '@mui/material/Slider';
 class SlideBar extends Component{
 
     onSliderChangeValue(value){
-        this.props.changeArenaLength(value)
+        this.props.updateArenaLength(value)
     }
 
     render(){
         return(
             <div className='slide-bar'>
-              <h1>Arena Length : {this.props.arenaLength}</h1>
+              <p>Arena Length : {this.props.arenaLength}</p>
               <Slider 
+              orientation='vertical'
               value={this.props.arenaLength} 
               step={1}
               marks 
               min={1} 
               max={50} 
-              onChange={(e, val) => this.onSliderChangeValue(val)} disabled={this.props.gameOn}/>
+              onChange={(e, val) => this.onSliderChangeValue(val)}/>
             </div>
         )
     }

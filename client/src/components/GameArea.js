@@ -64,7 +64,7 @@ class GameArea extends Component {
   }
 
   onKeyDown = (e) => {
-    if(this.gameOverState.isGameOver)
+    if(this.gameOverState.isGameOver || this.props.isSettingsOpen)
     {
       return
     }

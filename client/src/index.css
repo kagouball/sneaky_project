@@ -18,11 +18,6 @@
   z-index: 1;
 }
 
-.slide-bar{
-  position: relative;
-  width: 30%;
-}
-
 .party-view{
   visibility: collapse;
   display: none;
@@ -58,4 +53,24 @@
   bottom: 25%;
   margin: auto;
   background: white;
+}
+
+/**SETTINGS**/
+
+.settings-button {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+}
+
+.settings{
+  width: 150px;
+  height: 100%;
+  text-align: center;
+}
+
+.slide-bar{
+  position: relative;
+  width: 100%;
+  height: 50%;
 }
