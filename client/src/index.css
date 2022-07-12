@@ -12,6 +12,32 @@
   margin-right: 30%;
 }
 
+.main-grid
+{
+  display: grid;
+}
+
+.score-board
+{
+  position: absolute;
+  height: fit-content;
+  background-color: darkgrey;
+  padding: 2px;
+}
+
+.score-board>table
+{
+  border-collapse: collapse;
+  border: 1px solid #000;
+}
+
+.score-board th, .score-board td
+{
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  padding: 8px;
+}
+
 .game-area {
   position: relative;
   margin: 50px auto;

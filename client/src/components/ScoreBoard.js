@@ -2,7 +2,7 @@ import React from 'react';
 
 const ScoreBoard = ({ players }) => {
     return (
-        <div>
+        <div className='score-board'>
             <h2>ScoreBoard</h2>
             <table>
                 <tbody>

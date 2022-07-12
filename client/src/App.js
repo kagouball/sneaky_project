@@ -64,6 +64,7 @@ function App() {
       <div className="party-view">
         <Header userCount={userCount} roomName={roomName}/>
         <Scores actualScore={score} bestScore={bestScore} />
+        <div className="main-grid">
         <ScoreBoard players={players}/>
         <GameArea
           changeScore={setScore}
@@ -73,6 +74,7 @@ function App() {
           socket={socket}
           isSettingsOpen={isSettingsOpen}
         />
+        </div>
         <Settings
         updateArenaLength={updateArenaLength}
         arenaLength={arenaLength}
