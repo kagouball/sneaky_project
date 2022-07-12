@@ -3,11 +3,10 @@ import SlideBar from "./SlideBar";
 import { Fab, Drawer, Tooltip } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 
-const Settings = ({ updateArenaLength, arenaLength }) => {
-    const [settings, openSettings] = useState(false);
+const Settings = ({ updateArenaLength, arenaLength, isSettingsOpen, openSettings }) => {
 
     function toggleSettings() {
-        openSettings(!settings)
+        openSettings(!isSettingsOpen)
     }
 
     return (
@@ -19,7 +18,7 @@ const Settings = ({ updateArenaLength, arenaLength }) => {
                     </Fab>
                 </Tooltip>
                 <Drawer anchor={'right'}
-                    open={settings}
+                    open={isSettingsOpen}
                     onClose={toggleSettings}>
                     <div className='settings'>
                         <SlideBar

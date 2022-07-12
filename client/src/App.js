@@ -18,6 +18,7 @@ function App() {
   const [arenaLength, setArenaLength] = useState(20);
   const [userCount, setUserCount] = useState(0);
   const [roomName, setRoomName] = useState("");
+  const [isSettingsOpen, openSettings] = useState(false);
 
   useEffect(() => {
     socket.on("new_user", (data) => {
@@ -63,10 +64,13 @@ function App() {
           changePlayingState={setIsPlaying}
           arenaLength={arenaLength}
           socket={socket}
+          isSettingsOpen={isSettingsOpen}
         />
         <Settings
         updateArenaLength={updateArenaLength}
         arenaLength={arenaLength}
+        isSettingsOpen={isSettingsOpen}
+        openSettings={openSettings}
         />
         {/* <Field draw={draw}/> */}
       </div>
