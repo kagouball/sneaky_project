@@ -7,7 +7,8 @@ module.exports = {
     gameLoop,
     addPlayer,
     resetState,
-    createEmptyGameState
+    createEmptyGameState,
+    rewardWinner
 }
 
 // STATE MANAGMENT
@@ -47,7 +48,8 @@ function getNewPlayer(playerName)
         dots: [],
         name: playerName,
         score: 0,
-        color: '#000'
+        color: '#000',
+        gameWin: 0
     }
 }
 
@@ -105,6 +107,16 @@ function enlargeSnake(player)
     let newSnake = [...player.dots];
     newSnake.unshift([]);
     player.dots = newSnake;
+}
+
+function rewardWinner(players,loosers)
+{
+    Object.values(players).forEach(player => {
+        if(!loosers.includes(player))
+        {
+            player.gameWin += 1;
+        }
+    });
 }
 
 //CHECKER

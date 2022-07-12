@@ -1,0 +1,36 @@
+import React from 'react';
+
+const ScoreBoard = ({ players }) => {
+    return (
+        <div className='score-board'>
+            <h2>Score Board</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>Game win</th>
+                    </tr>
+                    {
+                        Object.values(players).map((player,i) => {
+                            const colorStyle ={
+                                backgroundColor: `${player.color}`
+                            }
+                            return (
+                                <tr key={i}>
+                                    <td style={colorStyle}/>
+                                    <td>{player.name}</td>
+                                    <td>{player.score}</td>
+                                    <td>{player.gameWin}</td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+export default ScoreBoard;
