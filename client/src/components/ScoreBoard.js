@@ -22,7 +22,7 @@ const ScoreBoard = ({ players }) => {
                                     <td style={colorStyle}/>
                                     <td>{player.name}</td>
                                     <td>{player.score}</td>
-                                    <td>{player.score}</td>
+                                    <td>{player.gameWin}</td>
                                 </tr>
                             )
                         })

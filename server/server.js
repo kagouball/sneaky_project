@@ -1,4 +1,4 @@
-const { createGameState, gameLoop, addPlayer, resetState } = require('./gameLogic/gameMain');
+const { createGameState, gameLoop, addPlayer, resetState, rewardWinner } = require('./gameLogic/gameMain');
 const { getUpdatedVelocity, areVelocityReversed} = require("./gameLogic/helper")
 const { makeid } = require('./utils');
 const { FRAME_RATE, MAX_PLAYER } = require('./constant')
@@ -110,6 +110,7 @@ function startGameInterval(roomName) {
     if (loosers.length == 0) {
       emitGameState(roomName, state[roomName])
     } else {
+      rewardWinner(state[roomName].players, loosers)
       emitGameOver(roomName, loosers);
       clearInterval(intervalId);
       resetGame(roomName);
