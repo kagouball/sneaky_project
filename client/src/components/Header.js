@@ -1,12 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Header = ({ userCount, title, roomName }) => {
+const Header = ({ title, roomName }) => {
   return (
     <header className="header">
       <h1>{title}</h1>
-      <h2>Current players : {userCount}</h2>
-      <h2>Room Name : {roomName}</h2>
+      <div>
+        <h3>Room Name</h3>
+        <div className="room-name">{roomName}</div>
+      </div>
     </header>
   );
 };
