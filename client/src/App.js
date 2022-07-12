@@ -7,6 +7,7 @@ import socketIOClient from "socket.io-client";
 import StartingForm from "./components/StartingForm";
 import { useEffect } from "react";
 import Settings from "./components/Settings";
+import ScoreBoard from "./components/ScoreBoard";
 
 const ENDPOINT = "http://127.0.0.1:3030";
 const socket = socketIOClient.connect(ENDPOINT)
@@ -19,6 +20,7 @@ function App() {
   const [userCount, setUserCount] = useState(0);
   const [roomName, setRoomName] = useState("");
   const [isSettingsOpen, openSettings] = useState(false);
+  const [players, setPlayers] = useState({});
 
   useEffect(() => {
     socket.on("new_user", (data) => {
@@ -30,6 +32,10 @@ function App() {
       hideStartView();
       displayPartyView();
     })
+
+    socket.on("gameState", (data) => {
+      setPlayers(data.players)
+    });
   }, [])
 
   const hideStartView = () => {
@@ -58,6 +64,7 @@ function App() {
       <div className="party-view">
         <Header userCount={userCount} roomName={roomName}/>
         <Scores actualScore={score} bestScore={bestScore} />
+        <ScoreBoard players={players}/>
         <GameArea
           changeScore={setScore}
           changeBestScore={setBestScore}
