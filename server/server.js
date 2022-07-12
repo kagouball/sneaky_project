@@ -1,5 +1,5 @@
 const { createGameState, gameLoop, addPlayer, resetState } = require('./gameLogic/gameMain');
-const { getUpdatedVelocity } = require("./gameLogic/helper")
+const { getUpdatedVelocity, areVelocityReversed} = require("./gameLogic/helper")
 const { makeid } = require('./utils');
 const { FRAME_RATE, MAX_PLAYER } = require('./constant')
 
@@ -48,7 +48,8 @@ io.on("connection", (socket) => {
       return;
     }
     const velocity = getUpdatedVelocity(keyCode);
-    if(velocity)
+    let playerDirection =  state[roomName].players[socket.id].direction;
+    if(velocity && !areVelocityReversed(velocity, playerDirection))
     {
       state[roomName].players[socket.id].direction = velocity;
     }
