@@ -41,22 +41,31 @@ function resetState(state)
     state.food=randomCoordinates_safe(state);
 }
 
-function getNewPlayer(playerName)
+function getNewPlayer()
 {
     return newPlayer = {
         direction: [0, 0],
         dots: [],
-        name: playerName,
+        name: "",
         score: 0,
         color: '#000',
         gameWin: 0
     }
 }
 
-function addPlayer(state, playerId, color)
+function addPlayer(state, playerId, name, color)
 {
-    const playersNumber = Object.keys(state.players).length;
-    let newPlayer = getNewPlayer(`player ${playersNumber + 1}`);
+    
+    let newPlayer = getNewPlayer();
+    if(name == null || name.length == 0)
+    {
+        const playersNumber = Object.keys(state.players).length;
+        newPlayer.name = `player ${playersNumber + 1}`;
+    }
+    else
+    {
+        newPlayer.name = name;
+    }
     newPlayer.dots.push(randomCoordinates_safe(state));
     newPlayer.color = color;
     state.players[playerId] = newPlayer;
