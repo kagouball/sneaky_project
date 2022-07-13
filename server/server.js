@@ -28,10 +28,7 @@ app.get("/", function (req, res) {
 io.on("connection", (socket) => {
   console.log(`New user connect : ${socket.id}`);
 
-  socket.on("disconnect", (reason) => {
-    console.log(`${socket.id} has disconnected`);
-  });
-
+  socket.on("disconnect", onDisconnect);
   socket.on("keydown", onkeydown);
   socket.on("create_room", onCreateRoom)
   socket.on("join_room", onJoinRoom)
@@ -96,6 +93,22 @@ io.on("connection", (socket) => {
     io.sockets.in(data.roomName).emit("new_user", ({ 'count': playerCount+1, 'socket_id': socket.id }));
     io.sockets.in(data.roomName).emit('init', state[data.roomName]);
     socket.emit('gameCode', data.roomName);
+  }
+
+  function onDisconnect()
+  {
+    const roomName = clientRooms[socket.id];
+    //remove socket id from clients room
+    delete clientRooms[socket.id];
+    //leave room
+    socket.leave(roomName);
+    //remove player from state
+    delete state[roomName].players[socket.id]
+    if(state[roomName].players.length == 0)
+    {
+      delete state[roomName];
+    }
+    console.log(`${socket.id} has disconnected`);
   }
 });
 
