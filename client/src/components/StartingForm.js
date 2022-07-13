@@ -37,8 +37,14 @@ class StartingForm extends Component {
         console.log("try to Join room : ", this.state.roomName)
         this.props.socket.emit("join_room", this.state);
     }
-
+    
     render() {
+        const colorStyle ={
+            backgroundColor: `${this.state.player_color}`,
+            height: `50px`,
+            width: `50px`,
+            margin: "auto",
+        }
         return (
             <div className='start-grid'>
                 <Box display="grid" gridTemplateColumns="repeat(2 ,1fr)" gap={2}>
@@ -52,9 +58,10 @@ class StartingForm extends Component {
                                     this.setState({ player_name: playerName})
                                 }}></input>
                                 <p>Choose your snake colour</p>
+                                <div style={colorStyle}></div>
                                 <Box sx={{ display: 'inline-block'}}>
                                     <GithubPicker
-                                        color={this.state.background}
+                                        color={this.state.player_color}
                                         onChangeComplete={this.handleChangeComplete} />
                                 </Box>
                             </div>
