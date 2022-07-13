@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
     
     let initialState = createGameState(socket.id);
     initialState.fieldSize = data.fieldSize;
-    addPlayer(initialState,socket.id,data.player_color);
+    addPlayer(initialState,socket.id,data.player_name,data.player_color);
     state[roomName] = initialState;
 
     socket.join(roomName);
@@ -90,7 +90,7 @@ io.on("connection", (socket) => {
     }
 
     clientRooms[socket.id] = data.roomName;
-    addPlayer(state[data.roomName],socket.id, data.player_color);
+    addPlayer(state[data.roomName],socket.id, data.player_name, data.player_color);
 
     socket.join(data.roomName);
     io.sockets.in(data.roomName).emit("new_user", ({ 'count': playerCount+1, 'socket_id': socket.id }));
