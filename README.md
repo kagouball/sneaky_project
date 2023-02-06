@@ -5,7 +5,7 @@
 Don't you think **SNAKE** games are incredible? In the "*snake games series*", this is a multiplayer snake game using web technologies.
 
 - Language : [**JavaScript**](https://www.javascript.com/)
-- Framwork : [**React js**](https://fr.reactjs.org/)
+- Framework : [**React js**](https://fr.reactjs.org/)
 - Librairies :
     - *Client<->Server* : [socket.io](https://socket.io/)
     - *Runtime* : [Node.js](https://nodejs.org/en/)
