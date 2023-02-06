@@ -4,7 +4,6 @@ import Food from './Food'
 import SimplePopup from './SimplePopup';
 
 const stepLength = 1;
-
 const initialState = {
   direction: -1,
   snakes: {},
@@ -106,7 +105,7 @@ class GameArea extends Component {
 
   render() {
     return (
-      <div className="game-area" style={{ width: this.state.fieldSize * stepLength * this.props.arenaLength + "px", height: this.state.fieldSize * stepLength * this.props.arenaLength + "px" }}>
+      <div className="game-area" style={{ width: this.props.arenaLength + "px", height: this.props.arenaLength + "px" }}>
         {this.gameOverState.isGameOver?
           <SimplePopup 
           loosers={this.gameOverState.loosers}

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 
 const Scores = ({ actualScore, bestScore }) => {
   return (
-      <>
+      <div className="scores">
         <h1>Best Score : {bestScore}</h1>
         <h2>actual score : {actualScore}</h2>
-      </>
+      </div>
   )
 }
 

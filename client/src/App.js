@@ -21,6 +21,9 @@ function App() {
   const [roomName, setRoomName] = useState("");
   const [isSettingsOpen, openSettings] = useState(false);
   const [players, setPlayers] = useState({});
+  const [gameAreaMaxHeight, setGameAreaMaxHeight] = useState(0);
+  const { computeGameAreaMaxHeight } = require("./tools/ResizeHelper");
+
 
   useEffect(() => {
     socket.on("new_user", (data) => {
@@ -36,6 +39,8 @@ function App() {
     socket.on("gameState", (data) => {
       setPlayers(data.players)
     });
+
+    window.addEventListener("resize", onResize);
   }, [])
 
   const hideStartView = () => {
@@ -55,6 +60,20 @@ function App() {
       setArenaLength(length);
     }
   };
+
+
+  const onResize = () =>
+  {
+    let max = computeGameAreaMaxHeight();
+    setGameAreaMaxHeight(max);
+  }
+
+  useEffect(()=>{
+    if(gameAreaMaxHeight < arenaLength)
+    {
+      updateArenaLength(gameAreaMaxHeight);
+    }
+  }, [gameAreaMaxHeight])
 
   return (
     <div className="container">
