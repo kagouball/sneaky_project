@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Snake from "./Snake"
 import Food from './Food'
 import SimplePopup from './SimplePopup';
+import GameAreaResizer from '../tools/GameAreaResizer';
+import PlayingState from '../tools/PlayingState';
 
 const stepLength = 1;
 const initialState = {
@@ -67,15 +69,15 @@ class GameArea extends Component {
     {
       return
     }
-    this.props.changePlayingState(false);
+    PlayingState.PlayerIsPlaying = true;
     e = e || window.event;
     this.emitKeyCode(e.keyCode)
   }
 
   onGameOver(loosers) {
-    this.props.changePlayingState(false);
+    PlayingState.PlayerIsPlaying = false;
     this.setState(initialState);
-   this.gameOverState.isGameOver = true;
+    this.gameOverState.isGameOver = true;
     //show loosers
     let sentence = "";
     this.gameOverState.loosers = loosers.reduce(
@@ -105,7 +107,7 @@ class GameArea extends Component {
 
   render() {
     return (
-      <div className="game-area" style={{ width: this.props.arenaLength + "px", height: this.props.arenaLength + "px" }}>
+      <div className="game-area" style={{ width: GameAreaResizer.gameAreaHeight + "px", height: GameAreaResizer.gameAreaHeight + "px" }}>
         {this.gameOverState.isGameOver?
           <SimplePopup 
           loosers={this.gameOverState.loosers}

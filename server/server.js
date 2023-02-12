@@ -102,11 +102,11 @@ io.on("connection", (socket) => {
     delete clientRooms[socket.id];
     //leave room
     socket.leave(roomName);
-    //remove player from state
     if(!state[roomName])
     {
       return
     }
+    //remove player from state
     delete state[roomName].players[socket.id]
     if(state[roomName].players.length == 0)
     {

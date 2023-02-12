@@ -1,13 +1,13 @@
-import React, { Component, useState } from "react";
+import React, { useEffect, useState } from "react";
+import socketIOClient from "socket.io-client";
+
 import Header from "./components/Header";
 import Scores from "./components/Scores";
 import GameArea from "./components/GameArea";
-import Field from "./components/FieldTest/Field";
-import socketIOClient from "socket.io-client";
 import StartingForm from "./components/StartingForm";
-import { useEffect } from "react";
 import Settings from "./components/Settings";
 import ScoreBoard from "./components/ScoreBoard";
+import GameAreaResizer from "./tools/GameAreaResizer";
 
 const ENDPOINT = "http://127.0.0.1:3030";
 const socket = socketIOClient.connect(ENDPOINT)
@@ -15,16 +15,11 @@ const socket = socketIOClient.connect(ENDPOINT)
 function App() {
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [arenaLength, setArenaLength] = useState(20);
   const [userCount, setUserCount] = useState(0);
   const [roomName, setRoomName] = useState("");
   const [isSettingsOpen, openSettings] = useState(false);
   const [players, setPlayers] = useState({});
-  const [gameAreaMaxHeight, setGameAreaMaxHeight] = useState(0);
-  const { computeGameAreaMaxHeight } = require("./tools/ResizeHelper");
-
-
+  
   useEffect(() => {
     socket.on("new_user", (data) => {
       setUserCount(data.count);
@@ -39,8 +34,6 @@ function App() {
     socket.on("gameState", (data) => {
       setPlayers(data.players)
     });
-
-    window.addEventListener("resize", onResize);
   }, [])
 
   const hideStartView = () => {
@@ -53,27 +46,8 @@ function App() {
     let partyView = document.getElementsByClassName("party-view")[0];
     partyView.style.visibility = "visible";
     partyView.style.display = "block";
+    GameAreaResizer.initialize();
   }
-
-  const updateArenaLength = (length) => {
-    if (!isPlaying) {
-      setArenaLength(length);
-    }
-  };
-
-
-  const onResize = () =>
-  {
-    let max = computeGameAreaMaxHeight();
-    setGameAreaMaxHeight(max);
-  }
-
-  useEffect(()=>{
-    if(gameAreaMaxHeight < arenaLength)
-    {
-      updateArenaLength(gameAreaMaxHeight);
-    }
-  }, [gameAreaMaxHeight])
 
   return (
     <div className="container">
@@ -88,19 +62,14 @@ function App() {
         <GameArea
           changeScore={setScore}
           changeBestScore={setBestScore}
-          changePlayingState={setIsPlaying}
-          arenaLength={arenaLength}
           socket={socket}
           isSettingsOpen={isSettingsOpen}
         />
         </div>
         <Settings
-        updateArenaLength={updateArenaLength}
-        arenaLength={arenaLength}
         isSettingsOpen={isSettingsOpen}
         openSettings={openSettings}
         />
-        {/* <Field draw={draw}/> */}
       </div>
     </div>
   );
