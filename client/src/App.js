@@ -9,7 +9,7 @@ import Settings from "./components/Settings";
 import ScoreBoard from "./components/ScoreBoard";
 import GameAreaResizer from "./tools/GameAreaResizer";
 
-const ENDPOINT = "http://127.0.0.1:3030";
+const ENDPOINT = "https://warm-depths-98624.herokuapp.com/";
 const socket = socketIOClient.connect(ENDPOINT)
 
 function App() {
