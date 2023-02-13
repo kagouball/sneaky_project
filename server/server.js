@@ -7,6 +7,8 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
+const PORT = process.env.PORT || 3030
+
 //socket.io
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
@@ -117,7 +119,7 @@ io.on("connection", (socket) => {
 });
 
 //on change app par server
-server.listen(3030, function () {
+server.listen(PORT, function () {
   console.log("Server ready on port 3030");
 });
 

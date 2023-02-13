@@ -9,7 +9,14 @@ import Settings from "./components/Settings";
 import ScoreBoard from "./components/ScoreBoard";
 import GameAreaResizer from "./tools/GameAreaResizer";
 
-const ENDPOINT = process.env.REACT_APP_SERVER_ENDPOINT || "http://127.0.0.1:3030";
+import Config from "./config.json";
+
+let ENDPOINT = process.env.REACT_APP_SERVER_ENDPOINT || "http://127.0.0.1:3030";
+
+if (process.env.NODE_ENV==='production') {
+  ENDPOINT = Config.SERVER_ENDPOINT;
+}
+
 const socket = socketIOClient.connect(ENDPOINT)
 
 function App() {
