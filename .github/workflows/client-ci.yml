@@ -26,9 +26,9 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ${{ secrets.AMINE_DOCKERHUB_USERNAME }}/$APP_NAME:${{ github.sha }}
+          tags: ${{ secrets.AMINE_DOCKERHUB_USERNAME }}/${{ env.APP_NAME }}:${{ github.sha }}
       - name: Build and push with latest tag
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ${{ secrets.AMINE_DOCKERHUB_USERNAME }}/$APP_NAME:latest
+          tags: ${{ secrets.AMINE_DOCKERHUB_USERNAME }}/${{ env.APP_NAME }}:latest
