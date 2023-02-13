@@ -29,8 +29,8 @@ jobs:
           context: "{{defaultContext}}:client"
           tags: ${{ secrets.AMINE_DOCKERHUB_USERNAME }}/${{ env.APP_NAME }}:${{ github.sha }}
       - name: Build and push with latest tag
-        context: "{{defaultContext}}:client"
         uses: docker/build-push-action@v4
         with:
           push: true
+          context: "{{defaultContext}}:client"
           tags: ${{ secrets.AMINE_DOCKERHUB_USERNAME }}/${{ env.APP_NAME }}:latest
