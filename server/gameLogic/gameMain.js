@@ -49,7 +49,8 @@ function getNewPlayer()
         name: "",
         score: 0,
         color: '#000',
-        gameWin: 0
+        gameWin: 0,
+        isReady : false
     }
 }
 

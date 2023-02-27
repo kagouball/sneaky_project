@@ -104,6 +104,14 @@
   color: red;
 }
 
+.ready-ask{
+  z-index: 2;
+  background-color: rgba(0,0,0, 0.5);
+  position: fixed;
+  width: inherit;
+  height: inherit;
+}
+
 /**POPUP**/
 
 .popup {

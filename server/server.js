@@ -30,8 +30,18 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", onDisconnect);
   socket.on("keydown", onkeydown);
-  socket.on("create_room", onCreateRoom)
-  socket.on("join_room", onJoinRoom)
+  socket.on("create_room", onCreateRoom);
+  socket.on("join_room", onJoinRoom);
+  socket.on("isReady", onIsReady);
+
+  function onIsReady(isReady) {
+    const roomName = clientRooms[socket.id];
+    if (!roomName) {
+      return;
+    }
+    state[roomName].players[socket.id].isReady = isReady;
+    socket.emit('gameState', state[roomName]);
+  }
 
   function onkeydown(keyCode) {
     const roomName = clientRooms[socket.id];

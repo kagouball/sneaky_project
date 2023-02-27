@@ -4,6 +4,7 @@ import Food from './Food'
 import SimplePopup from './SimplePopup';
 import GameAreaResizer from '../tools/GameAreaResizer';
 import PlayingState from '../tools/PlayingState';
+import ReadyAsk from './ReadyAsk';
 
 const stepLength = 1;
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
   snakes: {},
   food: [0, 0],
   fieldSize: 0,
+  isReady: false
 }
 
 class GameArea extends Component {
@@ -107,6 +109,7 @@ class GameArea extends Component {
 
   render() {
     return (
+      
       <div className="game-area" style={{ width: GameAreaResizer.gameAreaHeight + "px", height: GameAreaResizer.gameAreaHeight + "px" }}>
         {this.gameOverState.isGameOver?
           <SimplePopup 
@@ -114,6 +117,7 @@ class GameArea extends Component {
           closePopup={this.closePopup.bind(this)}
           />
         : null}
+        <ReadyAsk socket={this.props.socket} ></ReadyAsk>
         <Food Dot={[this.state.food[0] * this.getActualSize(), this.state.food[1] * this.getActualSize()]}
           Size={this.getActualSize()}></Food>
         <Snake Elements={this.snakesToElement()}
