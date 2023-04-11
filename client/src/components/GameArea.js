@@ -5,6 +5,7 @@ import SimplePopup from './SimplePopup';
 import GameAreaResizer from '../tools/GameAreaResizer';
 import PlayingState from '../tools/PlayingState';
 import ReadyAsk from './ReadyAsk';
+import { GameOnContext } from '../contexts/GameOnContextModule';
 
 const stepLength = 1;
 const initialState = {
@@ -15,12 +16,14 @@ const initialState = {
   isReady: false
 }
 
+//const {gameOn, setGameOn} = React.useContext(GameOnContext);
+
 class GameArea extends Component {
 
   state = initialState;
   gameOverState = {
     isGameOver: false,
-    loosers: "no one"
+    loosers: "no one",
   }
 
   emitKeyCode(keyCode) {
@@ -29,7 +32,8 @@ class GameArea extends Component {
 
   componentDidMount() {
     document.onkeydown = this.onKeyDown;
-
+    console.log("this.props.isGameOn");
+    console.log(this.props.isGameOn);
     this.props.socket.on("gameState", (data) => {
       this.onGameState(data)
     });
@@ -63,11 +67,12 @@ class GameArea extends Component {
       this.setState({ food: data.food });
       this.props.changeScore(data.players[this.props.socket.id].score)
       this.props.changeBestScore(data.bestScore);
+      this.props.setGameOn(false);
     }
   }
 
   onKeyDown = (e) => {
-    if(this.gameOverState.isGameOver || this.props.isSettingsOpen)
+    if(this.gameOverState.isGameOver || this.props.isSettingsOpen || !this.props.isGameOn)
     {
       return
     }

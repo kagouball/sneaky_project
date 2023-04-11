@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import socketIOClient from "socket.io-client";
 
 import Header from "./components/Header";
@@ -8,6 +8,8 @@ import StartingForm from "./components/StartingForm";
 import Settings from "./components/Settings";
 import ScoreBoard from "./components/ScoreBoard";
 import GameAreaResizer from "./tools/GameAreaResizer";
+import {GameOnContext} from "./contexts/GameOnContextModule";
+import GlobalStateProvider from "./contexts/GlobalStateProviderModule";
 
 const ENDPOINT = "http://127.0.0.1:3030";
 const socket = socketIOClient.connect(ENDPOINT)
@@ -19,7 +21,7 @@ function App() {
   const [roomName, setRoomName] = useState("");
   const [isSettingsOpen, openSettings] = useState(false);
   const [players, setPlayers] = useState({});
-  
+
   useEffect(() => {
     socket.on("new_user", (data) => {
       setUserCount(data.count);
@@ -52,25 +54,33 @@ function App() {
   return (
     <div className="container">
       <div className="start-view">
-        <StartingForm socket={socket}/>
+        <StartingForm socket={socket} />
       </div>
-      <div className="party-view">
-        <Header userCount={userCount} roomName={roomName}/>
-        <Scores actualScore={score} bestScore={bestScore} />
-        <div className="main-grid">
-        <ScoreBoard players={players}/>
-        <GameArea
-          changeScore={setScore}
-          changeBestScore={setBestScore}
-          socket={socket}
-          isSettingsOpen={isSettingsOpen}
-        />
+      <GlobalStateProvider>
+        <div className="party-view">
+          <Header userCount={userCount} roomName={roomName} />
+          <Scores actualScore={score} bestScore={bestScore} />
+          <div className="main-grid">
+            <ScoreBoard players={players} />
+            <GameOnContext.Consumer>
+              {GameOnContext => (
+                <GameArea
+                changeScore={setScore}
+                changeBestScore={setBestScore}
+                socket={socket}
+                isSettingsOpen={isSettingsOpen}
+                isGameOn={GameOnContext.gameOn}
+                setGameOn={GameOnContext.setGameOn}
+                />
+              )}
+            </GameOnContext.Consumer>
+          </div>
+          <Settings
+            isSettingsOpen={isSettingsOpen}
+            openSettings={openSettings}
+          />
         </div>
-        <Settings
-        isSettingsOpen={isSettingsOpen}
-        openSettings={openSettings}
-        />
-      </div>
+      </GlobalStateProvider >
     </div>
   );
 }
