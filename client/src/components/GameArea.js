@@ -29,8 +29,7 @@ class GameArea extends Component {
 
   componentDidMount() {
     document.onkeydown = this.onKeyDown;
-    console.log("this.props.isGameOn");
-    console.log(this.props.isGameOn);
+    
     this.props.socket.on("gameState", (data) => {
       this.onGameState(data)
     });
@@ -64,7 +63,7 @@ class GameArea extends Component {
       this.setState({ food: data.food });
       this.props.changeScore(data.players[this.props.socket.id].score)
       this.props.changeBestScore(data.bestScore);
-      this.props.setGameOn(false);
+      this.props.setGameOn(data.players[this.props.socket.id].isReady);
     }
   }
 
