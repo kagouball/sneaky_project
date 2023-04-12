@@ -5,7 +5,6 @@ import SimplePopup from './SimplePopup';
 import GameAreaResizer from '../tools/GameAreaResizer';
 import PlayingState from '../tools/PlayingState';
 import ReadyAsk from './ReadyAsk';
-import { GameOnContext } from '../contexts/GameOnContextModule';
 
 const stepLength = 1;
 const initialState = {
@@ -15,8 +14,6 @@ const initialState = {
   fieldSize: 0,
   isReady: false
 }
-
-//const {gameOn, setGameOn} = React.useContext(GameOnContext);
 
 class GameArea extends Component {
 

@@ -15,6 +15,4 @@ const GameOnContextProvider = ({ children }) =>
   );
 };
 
-//export const useGameOnState = () => React.useContext(GameOnContext);
-
 export {GameOnContextProvider, GameOnContext};
