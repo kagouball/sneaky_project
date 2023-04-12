@@ -1,6 +1,19 @@
 import React from 'react';
 
 const ScoreBoard = ({ players }) => {
+
+    function isReadyCase(playerIsReady)
+    {
+        if(playerIsReady)
+        {
+            return (<td>YES</td>);
+        }
+        else
+        {
+            return (<td>NO</td>);
+        }
+    }
+
     return (
         <div className='score-board'>
             <h2>Score Board</h2>
@@ -11,6 +24,7 @@ const ScoreBoard = ({ players }) => {
                         <th>Name</th>
                         <th>Score</th>
                         <th>Game win</th>
+                        <th>Is Ready</th>
                     </tr>
                     {
                         Object.values(players).map((player,i) => {
@@ -23,6 +37,7 @@ const ScoreBoard = ({ players }) => {
                                     <td>{player.name}</td>
                                     <td>{player.score}</td>
                                     <td>{player.gameWin}</td>
+                                    {isReadyCase(player.isReady)}
                                 </tr>
                             )
                         })

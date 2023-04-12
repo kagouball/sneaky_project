@@ -36,6 +36,7 @@ function resetState(state)
         player.dots= [randomCoordinates_safe(state)];
         player.direction=[0,0];
         player.score=0;
+        player.isReady=false;
     });
     //reset food
     state.food=randomCoordinates_safe(state);
@@ -49,7 +50,8 @@ function getNewPlayer()
         name: "",
         score: 0,
         color: '#000',
-        gameWin: 0
+        gameWin: 0,
+        isReady : false
     }
 }
 

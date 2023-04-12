@@ -4,6 +4,7 @@ import Food from './Food'
 import SimplePopup from './SimplePopup';
 import GameAreaResizer from '../tools/GameAreaResizer';
 import PlayingState from '../tools/PlayingState';
+import ReadyAsk from './ReadyAsk';
 
 const stepLength = 1;
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
   snakes: {},
   food: [0, 0],
   fieldSize: 0,
+  isReady: false
 }
 
 class GameArea extends Component {
@@ -18,7 +20,7 @@ class GameArea extends Component {
   state = initialState;
   gameOverState = {
     isGameOver: false,
-    loosers: "no one"
+    loosers: "no one",
   }
 
   emitKeyCode(keyCode) {
@@ -27,7 +29,8 @@ class GameArea extends Component {
 
   componentDidMount() {
     document.onkeydown = this.onKeyDown;
-
+    console.log("this.props.isGameOn");
+    console.log(this.props.isGameOn);
     this.props.socket.on("gameState", (data) => {
       this.onGameState(data)
     });
@@ -61,11 +64,12 @@ class GameArea extends Component {
       this.setState({ food: data.food });
       this.props.changeScore(data.players[this.props.socket.id].score)
       this.props.changeBestScore(data.bestScore);
+      this.props.setGameOn(false);
     }
   }
 
   onKeyDown = (e) => {
-    if(this.gameOverState.isGameOver || this.props.isSettingsOpen)
+    if(this.gameOverState.isGameOver || this.props.isSettingsOpen || !this.props.isGameOn)
     {
       return
     }
@@ -107,6 +111,7 @@ class GameArea extends Component {
 
   render() {
     return (
+      
       <div className="game-area" style={{ width: GameAreaResizer.gameAreaHeight + "px", height: GameAreaResizer.gameAreaHeight + "px" }}>
         {this.gameOverState.isGameOver?
           <SimplePopup 
@@ -114,6 +119,7 @@ class GameArea extends Component {
           closePopup={this.closePopup.bind(this)}
           />
         : null}
+        <ReadyAsk socket={this.props.socket} ></ReadyAsk>
         <Food Dot={[this.state.food[0] * this.getActualSize(), this.state.food[1] * this.getActualSize()]}
           Size={this.getActualSize()}></Food>
         <Snake Elements={this.snakesToElement()}
