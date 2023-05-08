@@ -1,11 +1,21 @@
-module.exports = {
-    isOnFood
+const { isPlayerOnFood } = require("./positionCheckers")
+const { randomCoordinates_safe } = require("./coordinateManagment")
+const { enlargeSnake } = require("./snakeManagment")
+const { updateBestScore, updateScore} = require("./scoreManagment");
+
+module.exports={
+    checkIfPlayerEat
 }
 
-function isOnFood(food, coordinate)
+function checkIfPlayerEat(state, player)
 {
-    if(food[0] === coordinate[0] && food[1] === coordinate[1]){
-        return true;
+    if(!isPlayerOnFood(state.food, player))
+    {
+        return
     }
-    return false;
+
+    state.food = randomCoordinates_safe(state);
+    enlargeSnake(player);
+    updateScore(player);
+    updateBestScore(state);
 }

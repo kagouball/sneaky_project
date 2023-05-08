@@ -1,7 +1,11 @@
-const { createGameState, gameLoop, addPlayer, resetState, rewardWinner } = require('./gameLogic/gameMain');
-const { getUpdatedVelocity, areVelocityReversed} = require("./gameLogic/helper")
-const { makeid } = require('./utils');
-const { FRAME_RATE, MAX_PLAYER } = require('./constant')
+const { gameLoop } = require('./gameLogic/gameMain');
+const { createGameState , resetGameState} = require('./gameLogic/gameStateManagment');
+const { addPlayer } = require('./gameLogic/playerManagment');
+const { getUpdatedVelocity, areVelocityReversed} = require("./gameLogic/velocityManagment")
+const { rewardWinner } = require('./gameLogic/scoreManagment');
+
+const { makeid } = require('./serverUtils/utils');
+const { FRAME_RATE, MAX_PLAYER } = require('./serverUtils/constant')
 
 const express = require("express");
 const cors = require("cors");
@@ -164,7 +168,7 @@ function emitGameOver(room, loosers) {
 function resetGame(roomName)
 {
   //clean state
-  resetState(state[roomName]);
+  resetGameState(state[roomName]);
   //restart game
   io.sockets.in(roomName).emit('init', state[roomName]);
   startGameInterval(roomName);
